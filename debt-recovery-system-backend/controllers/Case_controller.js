@@ -30,53 +30,62 @@ export const getDRCDetailsByCaseId = async (req, res) => {
     if (!case_id) {
       return res.status(400).json({
         status: "error",
-        message: "Case id not fund",
+        message: "Case ID is required",
         errors: {
           code: 400,
-          description: "caseid with the given ID not found.",
+          description: "Case ID must be provided in the request body.",
         },
       });
     }
-    const caseDetails = await CaseDetails.findOne({ case_id: case_id }).select("drc");
+
+    // Find case details and select all fields except timestamps
+    const caseDetails = await CaseDetails.findOne(
+      { case_id: case_id },
+   
+    );
+
     if (!caseDetails) {
       return res.status(404).json({
         status: "error",
-        message: "Case not found.",
+        message: "Case not found",
         errors: {
           code: 404,
-          description: "No case found with the provided Caseid",
+          description: `No case found with the provided Case ID: ${case_id}`,
         },
       });
     }
 
-    if (!caseDetails.drc) {
-      return res.status(404).json({
-        status: "error",
-        message: "DRC details not found.",
-        errors: {
-          code: 404,
-          description: `No DRC data available for the provided Case ID: ${case_id}.`,
-        },
+    // Prepare response data - drc array is separated from other case details
+    const { drc, ...caseData } = caseDetails.toObject();
+
+    const responseData = {
+      case_details: caseData,
+      drc_details: drc || []
+    };
+
+    // Check if DRC details exist
+    if (!drc || drc.length === 0) {
+      return res.status(200).json({
+        status: "success",
+        message: "Case details retrieved successfully. No DRC details found.",
+        data: responseData
       });
     }
 
-    // Return the DRC details
     return res.status(200).json({
       status: "success",
-      message: "DRC details retrieved successfully.",
-      data: caseDetails.drc,
+      message: "Case and DRC details retrieved successfully",
+      data: responseData
     });
-  } catch (err) {
-    // Log the error for debugging
-    console.error("Error fetching DRC data:", err.message);
 
-    // Return 500 Internal Server Error response
+  } catch (err) {
+    console.error("Error fetching case and DRC details:", err.message);
     return res.status(500).json({
       status: "error",
-      message: "Failed to retrieve DRC details.",
+      message: "Failed to retrieve case and DRC details",
       errors: {
         code: 500,
-        description: "internal server error occurred while fetching DRC details.",
+        description: "Internal server error occurred while fetching case and DRC details.",
       },
     });
   }

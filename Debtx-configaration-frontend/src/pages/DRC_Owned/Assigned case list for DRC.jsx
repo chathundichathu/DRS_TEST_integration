@@ -252,7 +252,7 @@ export default function AssignedCaseListforDRC() {
         </table>
       </div>
 
-      {/* <div className={GlobalStyle.navButtonContainer}>
+      <div className={GlobalStyle.navButtonContainer}>
         <button
           onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
           disabled={currentPage === 1}
@@ -270,7 +270,7 @@ export default function AssignedCaseListforDRC() {
         >
           Next
         </button>
-      </div> */}
+      </div>
     </div>
   );
 }
