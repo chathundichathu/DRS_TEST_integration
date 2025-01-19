@@ -1,6 +1,6 @@
 import { Router } from "express";
 import {
-    Create_Incident, Upload_DRS_File, listIncident
+    Create_Incident, Upload_DRS_File, listIncident , getIncidentDetailsByCaseID
 } from "../controllers/Incident_controller.js";
 
 
@@ -252,6 +252,8 @@ router.post("/Upload_DRS_File", Upload_DRS_File);
 
 
 router.post('/List_Incident',listIncident);
+
+router.post('/getIncidentDetailsByIncidentId',getIncidentDetailsByCaseID);
 
 
 export default router;

@@ -16,6 +16,8 @@
 import { Router } from "express";
 import { drcExtendValidityPeriod } from "../controllers/Case_controller.js";
 import { getDRCDetailsByCaseId } from '../controllers/Case_controller.js';
+// import { getCaseDetailsByCaseId } from '../controllers/Case_controller.js';
+import { get } from "mongoose";
 
 
 
@@ -24,6 +26,7 @@ const router = Router();
 router.patch("/Drc_Extend_Validity_Period", drcExtendValidityPeriod);
 
 router.post('/getDRCDetailsByCaseId', getDRCDetailsByCaseId);
+// router.post('/getCaseDetailsByCaseId',getCaseDetailsByCaseId);
 
 export default router;
 
