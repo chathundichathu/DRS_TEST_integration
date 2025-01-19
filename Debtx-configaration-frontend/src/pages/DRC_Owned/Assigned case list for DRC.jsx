@@ -25,7 +25,7 @@ export default function AssignedCaseListforDRC() {
   const [isFiltering, setIsFiltering] = useState(false);
   const [totalRecords, setTotalRecords] = useState(0);
 
-  const recordsPerPage = 5;
+  const recordsPerPage = 7;
 
   useEffect(() => {
     const fetchCases = async () => {
@@ -57,6 +57,25 @@ export default function AssignedCaseListforDRC() {
     }
   }, [drc_id]);
 
+  // Date validation handlers
+  const handleFromDateChange = (date) => {
+    if (filterValues.toDate && date > filterValues.toDate) {
+      setError("The 'From' date cannot be later than the 'To' date.");
+    } else {
+      setError("");
+      handleFilterChange('fromDate', date);
+    }
+  };
+
+  const handleToDateChange = (date) => {
+    if (filterValues.fromDate && date < filterValues.fromDate) {
+      setError("The 'To' date cannot be earlier than the 'From' date.");
+    } else {
+      setError("");
+      handleFilterChange('toDate', date);
+    }
+  };
+
   const getFilteredData = () => {
     if (!isFiltering) return cases;
     
@@ -78,37 +97,45 @@ export default function AssignedCaseListforDRC() {
     });
   };
 
+  // const searchedData = getFilteredData().filter(item => {
+  //   if (!searchQuery.trim()) return true;
+    
+  //   const searchTerms = searchQuery.toLowerCase().trim().split(/\s+/);
+    
+  //   return searchTerms.every(term => {
+  //     // Check if the term is a number (could be case ID or amount)
+  //     if (/^\d+$/.test(term)) {
+  //       return (
+  //         (item.case_id && item.case_id.toString() === term) ||
+  //         (item.current_arrears_amount && 
+  //          item.current_arrears_amount.toString().includes(term))
+  //       );
+  //     }
+      
+  //     // Search through all relevant fields
+  //     return Object.entries(item).some(([key, value]) => {
+  //       if (!value) return false;
+        
+  //       if (typeof value === 'string') {
+  //         return value.toLowerCase().includes(term);
+  //       }
+  //       if (typeof value === 'number') {
+  //         return value.toString().toLowerCase().includes(term);
+  //       }
+  //       if (value instanceof Date) {
+  //         return value.toLocaleDateString().includes(term);
+  //       }
+  //       return false;
+  //     });
+  //   });
+  // });
+
   const searchedData = getFilteredData().filter(item => {
     if (!searchQuery.trim()) return true;
-    
-    const searchTerms = searchQuery.toLowerCase().trim().split(/\s+/);
-    
-    return searchTerms.every(term => {
-      // Check if the term is a number (could be case ID or amount)
-      if (/^\d+$/.test(term)) {
-        return (
-          (item.case_id && item.case_id.toString() === term) ||
-          (item.current_arrears_amount && 
-           item.current_arrears_amount.toString().includes(term))
-        );
-      }
-      
-      // Search through all relevant fields
-      return Object.entries(item).some(([key, value]) => {
-        if (!value) return false;
-        
-        if (typeof value === 'string') {
-          return value.toLowerCase().includes(term);
-        }
-        if (typeof value === 'number') {
-          return value.toString().toLowerCase().includes(term);
-        }
-        if (value instanceof Date) {
-          return value.toLocaleDateString().includes(term);
-        }
-        return false;
-      });
-    });
+    return Object.values(item)
+      .join(" ")
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase());
   });
 
   const totalPages = Math.ceil(searchedData.length / recordsPerPage);
@@ -167,52 +194,52 @@ export default function AssignedCaseListforDRC() {
     <div className={GlobalStyle.fontPoppins}>
       <h1 className={GlobalStyle.headingLarge}>Case List</h1>
       
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-6 mb-6">
+      <div className="flex items-center gap-4 flex-wrap">
         <input
           type="text"
           value={filterValues.arrearsAmount}
           onChange={(e) => handleFilterChange('arrearsAmount', e.target.value)}
           placeholder="Enter Arrears Amount"
-          className={`${GlobalStyle.inputText} col-span-2`}
+          className={GlobalStyle.inputText}
         />
         <input
           type="text"
           value={filterValues.ro}
           onChange={(e) => handleFilterChange('ro', e.target.value)}
           placeholder="Enter RO"
-          className={`${GlobalStyle.inputText} col-span-2`}
+          className={GlobalStyle.inputText}
         />
-        <div className="col-span-2">
+
+        <div className="flex items-center gap-2">
           <DatePicker
             selected={filterValues.fromDate}
-            onChange={(date) => handleFilterChange('fromDate', date)}
+            onChange={handleFromDateChange}
             dateFormat="dd/MM/yyyy"
-            placeholderText="From Date"
-            className={`${GlobalStyle.inputText} w-full`}
+            placeholderText="dd/MM/yyyy"
+            className={GlobalStyle.inputText}
           />
-        </div>
-        <div className="col-span-2 ml-4">
           <DatePicker
             selected={filterValues.toDate}
-            onChange={(date) => handleFilterChange('toDate', date)}
+            onChange={handleToDateChange}
             dateFormat="dd/MM/yyyy"
-            placeholderText="To Date"
-            className={`${GlobalStyle.inputText} w-full`}
+            placeholderText="dd/MM/yyyy"
+            className={GlobalStyle.inputText}
           />
+          {error && <span className={GlobalStyle.errorText}>{error}</span>}
         </div>
-        <div className="flex gap-2 col-span-3 col-start-9">
+
           <button
             onClick={handleFilterSubmit}
-            className={GlobalStyle.buttonPrimary}
+            className={`${GlobalStyle.buttonPrimary} flex-shrink-0`}
           >
             Filter
           </button>
-        </div>
+        
       </div>
 
-      <div className="flex justify-between items-center mt-6 mb-4">
+      <div className="flex flex-col">
+      <div className="mb-4 flex justify-start">
         <div className={GlobalStyle.searchBarContainer}>
-          <FaSearch className={GlobalStyle.searchBarIcon} />
           <input
             type="text"
             value={searchQuery}
@@ -220,6 +247,7 @@ export default function AssignedCaseListforDRC() {
             placeholder=""
             className={GlobalStyle.inputSearch}
           />
+          <FaSearch className={GlobalStyle.searchBarIcon} />
         </div>
       </div>
 
@@ -227,26 +255,26 @@ export default function AssignedCaseListforDRC() {
         <table className={GlobalStyle.table}>
           <thead className={GlobalStyle.thead}>
             <tr>
-              <th className={GlobalStyle.tableHeader}>Case ID</th>
-              <th className={GlobalStyle.tableHeader}>Status</th>
-              <th className={GlobalStyle.tableHeader}>Date</th>
-              <th className={GlobalStyle.tableHeader}>Amount</th>
-              <th className={GlobalStyle.tableHeader}>Action</th>
-              <th className={GlobalStyle.tableHeader}>RTOM Area</th>
-              <th className={GlobalStyle.tableHeader}>Expire Date</th>
-              <th className={GlobalStyle.tableHeader}>RO</th>
+              <th scope="col" className={GlobalStyle.tableHeader}>Case ID</th>
+              <th scope="col" className={GlobalStyle.tableHeader}>Status</th>
+              <th scope="col" className={GlobalStyle.tableHeader}>Date</th>
+              <th scope="col" className={GlobalStyle.tableHeader}>Amount</th>
+              <th scope="col" className={GlobalStyle.tableHeader}>Action</th>
+              <th scope="col" className={GlobalStyle.tableHeader}>RTOM Area</th>
+              <th scope="col" className={GlobalStyle.tableHeader}>Expire Date</th>
+              <th scope="col" className={GlobalStyle.tableHeader}>RO</th>
             </tr>
           </thead>
           <tbody>
-            {currentData.length === 0 ? (
-              <tr>
-                <td colSpan="8" className={`${GlobalStyle.tableData} text-center`}>
-                  No matching cases found.
-                </td>
-              </tr>
+          {currentData.length === 0 ? (
+                <tr>
+                  <td colSpan="9" className="text-center py-4">
+                    No results found
+                  </td>
+                </tr>
             ) : (
               currentData.map((item, index) => (
-                <tr key={item._id} className={index % 2 === 0 ? GlobalStyle.tableRowEven : GlobalStyle.tableRowOdd}>
+                <tr key={item._id} className={index % 2 === 0 ? "bg-white bg-opacity-75" : "bg-gray-50 bg-opacity-50"}>
                   <td 
                     className={`${GlobalStyle.tableData} hover:underline cursor-pointer text-blue-600`}
                     onClick={() => handleCaseIdClick(item.case_id)}
@@ -266,26 +294,30 @@ export default function AssignedCaseListforDRC() {
           </tbody>
         </table>
       </div>
-
-      <div className={GlobalStyle.navButtonContainer}>
-        <button
-          onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-          disabled={currentPage === 1}
-          className={GlobalStyle.navButton}
-        >
-          Previous
-        </button>
-        <span className={GlobalStyle.headingMedium}>
-          Page {currentPage} of {totalPages || 1}
-        </span>
-        <button
-          onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-          disabled={currentPage === totalPages || totalPages === 0}
-          className={GlobalStyle.navButton}
-        >
-          Next
-        </button>
       </div>
+
+      {/* Navigation Buttons */}
+      {searchedData.length > recordsPerPage && (
+        <div className={GlobalStyle.navButtonContainer}>
+          <button
+            className={GlobalStyle.navButton}
+            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+            disabled={currentPage === 1}
+          >
+            <FaArrowLeft />
+          </button>
+          <span className={GlobalStyle.headingMedium}>
+            Page {currentPage} of {totalPages || 1}
+          </span>
+          <button
+            className={GlobalStyle.navButton}
+            onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+            disabled={currentPage === totalPages || totalPages === 0}
+          >
+            <FaArrowRight />
+          </button>
+        </div>
+      )}
     </div>
   );
 }
