@@ -343,18 +343,18 @@ export const getIncidentDetailsByCaseID = async (req, res) => {
       // Step 2: Find the incident details with specific field selection
       const incidentDetails = await Incident.findOne(
           { Incident_Id: { $in: [incident_id, incident_id.toString(), Number(incident_id)] } },
-          {
-              Incident_Id: 1,
-              Account_Num: 1,
-              Arrears: 1,
-              Created_By: 1,
-              Created_Dtm: 1,
-              Incident_Status: 1,
-              'Contact_Details.Contact_Type': 1,
-              'Customer_Details.Customer_Name': 1,
-              'Account_Details.Account_Status': 1,
-              _id: 0 // Exclude the _id field
-          }
+          // {
+          //     Incident_Id: 1,
+          //     Account_Num: 1,
+          //     Arrears: 1,
+          //     Created_By: 1,
+          //     Created_Dtm: 1,
+          //     Incident_Status: 1,
+          //     'Contact_Details.Contact_Type': 1,
+          //     'Customer_Details.Customer_Name': 1,
+          //     'Account_Details.Account_Status': 1,
+          //     _id: 0 // Exclude the _id field
+          // }
       );
 
       if (!incidentDetails) {
