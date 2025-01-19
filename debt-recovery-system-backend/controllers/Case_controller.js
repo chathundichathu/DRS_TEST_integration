@@ -151,3 +151,46 @@ export const getDRCDetailsByCaseId = async (req, res) => {
 //       });
 //     }
 //   };
+
+
+// Get the case details by using case Id
+
+// export const getCaseDetailsByCaseId = async (req, res) => {
+//   try {
+//     const {case_id} =req.body;
+//     if(!case_id){
+//       return res.status (400).json({
+//         status : " error",
+//         message: "unable to retrieve case details",
+//         errors: {
+//           code: 400,
+//           description: "Case ID not found.",
+//         },
+//       });
+//     } 
+//     const cases = await CaseDetails.findOne({ case_id: case_id });
+//     if(!cases){
+//       return res.status (404).json({
+//         status:"error",
+//         message:"Case not Found",
+//         errors:{
+//           code:404,
+//           description:"Case with the given ID not found."
+//         },
+//       })
+//     }
+//     return res.status (200).json({
+//       status:"success",
+//       message:"Case details retrived successfully",
+//       data:cases,
+//     })
+
+//   }catch (error) {
+//     return res.status (500).json ({
+//       status : "error",
+//       message : "Internal server error occurred while fetching case details.",
+//       error : error.message
+//     })
+//   }
+
+// }

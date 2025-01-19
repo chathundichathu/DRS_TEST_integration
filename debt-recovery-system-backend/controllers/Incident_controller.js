@@ -10,6 +10,7 @@ import { Request_Incident_External_information } from "../services/IncidentServi
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 import Incident from '../models/Incident.js'; 
+import CaseDetails from "../models/Case_details.js";
 
 // Define __dirname for ES Modules
 const __filename = fileURLToPath(import.meta.url);
@@ -293,5 +294,96 @@ export const listIncident = async (req, res) => {
   } catch (error) {
       console.error('Error fetching incident:', error);
       res.status(500).json({ success: false, message: 'Error fetching incident.' });
+  }
+};
+
+
+
+
+
+
+
+
+
+
+export const getIncidentDetailsByCaseID = async (req, res) => {
+  const { case_id } = req.body;
+  
+  try {
+      // Validate if case_id is provided
+      if (!case_id) {
+          return res.status(400).json({
+              status: "error",
+              message: "Case ID is required.",
+              errors: {
+                  code: 400,
+                  description: "Please provide a valid Case ID in the request body.",
+              }
+          });
+      }
+
+      // Step 1: Find the case record and get the incident_id
+      const caseDetails = await CaseDetails.findOne({
+          case_id: { $in: [case_id, case_id.toString(), Number(case_id)] }
+      });
+
+      if (!caseDetails) {
+          return res.status(404).json({
+              status: "error",
+              message: `No case found for the provided ID: ${case_id}.`,
+              errors: {
+                  code: 404,
+                  description: "The case record does not exist in the database.",
+              }
+          });
+      }
+
+      const incident_id = caseDetails.incident_id;
+
+      // Step 2: Find the incident details with specific field selection
+      const incidentDetails = await Incident.findOne(
+          { Incident_Id: { $in: [incident_id, incident_id.toString(), Number(incident_id)] } },
+          // {
+          //     Incident_Id: 1,
+          //     Account_Num: 1,
+          //     Arrears: 1,
+          //     Created_By: 1,
+          //     Created_Dtm: 1,
+          //     Incident_Status: 1,
+          //     'Contact_Details.Contact_Type': 1,
+          //     'Customer_Details.Customer_Name': 1,
+          //     'Account_Details.Account_Status': 1,
+          //     _id: 0 // Exclude the _id field
+          // }
+      );
+
+      if (!incidentDetails) {
+          return res.status(404).json({
+              status: "error",
+              message: `No incident found for the incident ID: ${incident_id}.`,
+              errors: {
+                  code: 404,
+                  description: "The incident record does not exist in the database.",
+              }
+          });
+      }
+
+      return res.status(200).json({
+          status: "success",
+          message: `Incident details for Incident Id : ${incident_id} of Case Id : ${case_id}`,
+          data: incidentDetails,
+      });
+
+  } catch (error) {
+      console.error("Error retrieving incident details:", error);
+      return res.status(500).json({
+          status: "error",
+          message: "Failed to retrieve incident details.",
+          error: error.message,
+          errors: {
+              code: 500,
+              description: error.message || "Internal server error occurred while retrieving incident details.",
+          }
+      });
   }
 };
