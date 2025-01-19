@@ -1,7 +1,6 @@
-// AssignedCaseListforDRC.jsx
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { FaSearch, FaFilter } from "react-icons/fa";
+import { FaSearch} from "react-icons/fa";
 import DatePicker from "react-datepicker";
 import { List_CasesOwened_By_DRC } from "../../services/Ro/RO";
 import GlobalStyle from "../../assets/prototype/GlobalStyle.jsx";
@@ -82,18 +81,33 @@ export default function AssignedCaseListforDRC() {
   const searchedData = getFilteredData().filter(item => {
     if (!searchQuery.trim()) return true;
     
-    const searchLower = searchQuery.toLowerCase().trim();
+    const searchTerms = searchQuery.toLowerCase().trim().split(/\s+/);
     
-    if (/^\d+$/.test(searchQuery)) {
-      return item.case_id && item.case_id.toString() === searchQuery;
-    }
-    
-    return Object.entries(item).some(([key, value]) => {
-      if (value && typeof value !== 'object') {
-        const valueStr = value.toString().toLowerCase();
-        return valueStr.includes(searchLower);
+    return searchTerms.every(term => {
+      // Check if the term is a number (could be case ID or amount)
+      if (/^\d+$/.test(term)) {
+        return (
+          (item.case_id && item.case_id.toString() === term) ||
+          (item.current_arrears_amount && 
+           item.current_arrears_amount.toString().includes(term))
+        );
       }
-      return false;
+      
+      // Search through all relevant fields
+      return Object.entries(item).some(([key, value]) => {
+        if (!value) return false;
+        
+        if (typeof value === 'string') {
+          return value.toLowerCase().includes(term);
+        }
+        if (typeof value === 'number') {
+          return value.toString().toLowerCase().includes(term);
+        }
+        if (value instanceof Date) {
+          return value.toLocaleDateString().includes(term);
+        }
+        return false;
+      });
     });
   });
 
@@ -203,6 +217,7 @@ export default function AssignedCaseListforDRC() {
             type="text"
             value={searchQuery}
             onChange={handleSearchChange}
+            placeholder=""
             className={GlobalStyle.inputSearch}
           />
         </div>
@@ -241,7 +256,7 @@ export default function AssignedCaseListforDRC() {
                   <td className={GlobalStyle.tableData}>{item.case_current_status}</td>
                   <td className={GlobalStyle.tableData}>{formatDate(item.created_dtm)}</td>
                   <td className={GlobalStyle.tableData}>{item.current_arrears_amount}</td>
-                  <td className={GlobalStyle.tableData}></td>
+                  <td className={GlobalStyle.tableData}>{item.action}</td>
                   <td className={GlobalStyle.tableData}>{item.area}</td>
                   <td className={GlobalStyle.tableData}>{formatDate(item.expire_dtm)}</td>
                   <td className={GlobalStyle.tableData}>{item.ro}</td>
@@ -274,7 +289,6 @@ export default function AssignedCaseListforDRC() {
     </div>
   );
 }
-
 
 
 // import { useParams } from "react-router-dom";
