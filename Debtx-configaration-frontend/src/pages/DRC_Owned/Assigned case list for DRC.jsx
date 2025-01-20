@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { FaSearch} from "react-icons/fa";
+import { FaSearch, FaArrowLeft, FaArrowRight} from "react-icons/fa";
 import DatePicker from "react-datepicker";
 import { List_CasesOwened_By_DRC } from "../../services/Ro/RO";
 import GlobalStyle from "../../assets/prototype/GlobalStyle.jsx";
@@ -97,39 +97,6 @@ export default function AssignedCaseListforDRC() {
     });
   };
 
-  // const searchedData = getFilteredData().filter(item => {
-  //   if (!searchQuery.trim()) return true;
-    
-  //   const searchTerms = searchQuery.toLowerCase().trim().split(/\s+/);
-    
-  //   return searchTerms.every(term => {
-  //     // Check if the term is a number (could be case ID or amount)
-  //     if (/^\d+$/.test(term)) {
-  //       return (
-  //         (item.case_id && item.case_id.toString() === term) ||
-  //         (item.current_arrears_amount && 
-  //          item.current_arrears_amount.toString().includes(term))
-  //       );
-  //     }
-      
-  //     // Search through all relevant fields
-  //     return Object.entries(item).some(([key, value]) => {
-  //       if (!value) return false;
-        
-  //       if (typeof value === 'string') {
-  //         return value.toLowerCase().includes(term);
-  //       }
-  //       if (typeof value === 'number') {
-  //         return value.toString().toLowerCase().includes(term);
-  //       }
-  //       if (value instanceof Date) {
-  //         return value.toLocaleDateString().includes(term);
-  //       }
-  //       return false;
-  //     });
-  //   });
-  // });
-
   const searchedData = getFilteredData().filter(item => {
     if (!searchQuery.trim()) return true;
     return Object.values(item)
@@ -185,6 +152,15 @@ export default function AssignedCaseListforDRC() {
       month: '2-digit',
       year: 'numeric'
     });
+  };
+
+  const formatAmount = (amount) => {
+    if (amount == null) return "";
+    return new Intl.NumberFormat('en-US', {
+      style: 'decimal',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    }).format(amount);
   };
 
   if (loading) return <div className={GlobalStyle.paragraph}>Loading...</div>;
@@ -276,14 +252,14 @@ export default function AssignedCaseListforDRC() {
               currentData.map((item, index) => (
                 <tr key={item._id} className={index % 2 === 0 ? "bg-white bg-opacity-75" : "bg-gray-50 bg-opacity-50"}>
                   <td 
-                    className={`${GlobalStyle.tableData} hover:underline cursor-pointer text-blue-600`}
+                    className={`${GlobalStyle.tableData} hover:underline cursor-pointer text-black-600`}
                     onClick={() => handleCaseIdClick(item.case_id)}
                   >
                     {item.case_id}
                   </td>
                   <td className={GlobalStyle.tableData}>{item.case_current_status}</td>
                   <td className={GlobalStyle.tableData}>{formatDate(item.created_dtm)}</td>
-                  <td className={GlobalStyle.tableData}>{item.current_arrears_amount}</td>
+                  <td className={GlobalStyle.tableData}>{formatAmount(item.current_arrears_amount)}</td>
                   <td className={GlobalStyle.tableData}>{item.action}</td>
                   <td className={GlobalStyle.tableData}>{item.area}</td>
                   <td className={GlobalStyle.tableData}>{formatDate(item.expire_dtm)}</td>
