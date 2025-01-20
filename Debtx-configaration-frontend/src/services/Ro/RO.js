@@ -211,3 +211,41 @@ export const List_CasesOwened_By_DRC = async (drc_id) => {
       throw error;
   }
 };
+
+  // export const List_CasesOwned_By_DRC = async (drc_id) => {
+  //   if (!drc_id) {
+  //     throw new Error('drc ID is required');
+  //   }
+  
+  //   try {
+  //     console.log('Fetching case details for case:', drc_id);
+  //     const response = await axios.post(
+  //       `${URL}/List_CasesOwned_By_DRC`,
+  //       { drc_id },
+  //       {
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //         }
+  //       }
+  //     );
+  
+  //     if (response.data && response.status === 200) {
+  //       return response.data;
+  //     }
+  
+  //     throw new Error(response.data?.message || 'Failed to fetch DRC details');
+      
+  //   } catch (error) {
+  //     console.error("Error in getDRCDetailsByCaseId:", error);
+      
+  //     if (error.response?.status === 400) {
+  //       throw new Error('Invalid case ID or case not found');
+  //     }
+      
+  //     throw new Error(
+  //       error.response?.data?.message || 
+  //       error.message || 
+  //       'An error occurred while fetching DRC details'
+  //     );
+  //   }
+  // };

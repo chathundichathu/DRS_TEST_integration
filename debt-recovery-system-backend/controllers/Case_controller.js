@@ -98,7 +98,7 @@ export const getDRCDetailsByCaseId = async (req, res) => {
 //     try {
 //       const { case_id } = req.body;
   
-//       // Validate `case_id`
+//       // Vadate `case_id`
 //       if (!case_id) {
 //         return res.status(400).json({
 //           status: "error",

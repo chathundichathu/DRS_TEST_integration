@@ -6,13 +6,15 @@ import GlobalStyle from "../../assets/prototype/GlobalStyle";
 
 const CaseDetails = () => {
   const location = useLocation();
-  const caseId = location.pathname.split('/').pop();
-  
+  const caseId = location.pathname.split("/").pop();
+
   const [showDRCCard, setShowDRCCard] = useState(false);
   const [loading, setLoading] = useState(false);
   const [caseData, setCaseData] = useState(null);
   const [drcData, setDrcData] = useState(null);
   const [error, setError] = useState("");
+  const [activeTab, setActiveTab] = useState("CaseDetails");
+  const [loadingTab, setLoadingTab] = useState(false);
 
   useEffect(() => {
     if (caseId) {
@@ -30,18 +32,35 @@ const CaseDetails = () => {
     setShowDRCCard(!showDRCCard);
   };
 
+  const handleTabChange = async (tab) => {
+    setLoadingTab(true);
+    setActiveTab(tab);
+    
+    try {
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      if (tab === "IncidentDetails") {
+        console.log("Loading incident details...");
+      }
+    } catch (error) {
+      console.error("Error loading tab data:", error);
+      setError("Failed to load tab content");
+    } finally {
+      setLoadingTab(false);
+    }
+  };
+
   const fetchCaseAndDRCDetails = async () => {
     if (!caseId) {
       setError("No case ID available");
       return;
     }
-
     try {
       setLoading(true);
       setError("");
-      
+
       const response = await getDRCDetailsByCaseId(caseId);
-      
+
       if (response && response.data) {
         setCaseData(response.data.case_details || {});
 
@@ -86,78 +105,72 @@ const CaseDetails = () => {
     "Write OFF",
   ];
 
-  return (
-    <div className={GlobalStyle.fontPoppins}>
-      <div className="">
-        <h2 className={GlobalStyle.headingLarge}>Case Details</h2>
-        <div className="flex gap-4 mt-4">
-          {/* Main Case Details Card */}
-          <div className={`${GlobalStyle.cardContainer} `}>
-            <div className="grid grid-cols-2 gap-4">
-              <p className="mb-2">
-                <span className="font-medium block mb-1">Account No</span>
-                <span className="text-gray-700">{caseData?.account_no || 'N/A'}</span>
-              </p>
-              <p className="mb-2">
-                <span className="font-medium block mb-1">Customer Ref</span>
-                <span className="text-gray-700">{caseData?.customer_ref || 'N/A'}</span>
-              </p>
-              <p className="mb-2">
-                <span className="font-medium block mb-1">Area</span>
-                <span className="text-gray-700">{caseData?.area || 'N/A'}</span>
-              </p>
-              <p className="mb-2">
-                <span className="font-medium block mb-1">RTOM</span>
-                <span className="text-gray-700">{caseData?.rtom || 'N/A'}</span>
-              </p>
-              <p className="mb-2">
-                <span className="font-medium block mb-1">Arrears amount</span>
-                <span className="text-gray-700">{caseData?.arrears_amount || 'N/A'}</span>
-              </p>
-              <p className="mb-2">
-                <span className="font-medium block mb-1">Action type</span>
-                <span className="text-gray-700">{caseData?.action_type || 'N/A'}</span>
-              </p>
-              <p className="mb-2">
-                <span className="font-medium block mb-1">Last payment date</span>
-                <span className="text-gray-700">
-                  {caseData?.last_payment_date ? new Date(caseData.last_payment_date).toLocaleDateString() : 'N/A'}
-                </span>
-              </p>
-              <p className="mb-2">
-                <span className="font-medium block mb-1">Last BSS Reading date</span>
-                <span className="text-gray-700">
-                  {caseData?.last_bss_reading_date ? new Date(caseData.last_bss_reading_date).toLocaleDateString() : 'N/A'}
-                </span>
-              </p>
-              <p className="mb-2">
-                <span className="font-medium block mb-1">Current status</span>
-                <span className="text-gray-700">{caseData?.case_current_status || 'N/A'}</span>
-              </p>
-              <p className="mb-2">
-                <span className="font-medium block mb-1">Commission</span>
-                <span className="text-gray-700">{caseData?.commission || 'N/A'}</span>
-              </p>
-            </div>
+  const renderCaseDetails = () => (
+    <div>
+      <div className="flex gap-4 mt-4">
+        <div className={`${GlobalStyle.cardContainer}`}>
+          <div className="grid grid-cols-2 gap-4">
+            <p className="mb-2">
+              <span className="font-medium block mb-1">Account No</span>
+              <span className="text-gray-700">{caseData?.account_no || 'N/A'}</span>
+            </p>
+            <p className="mb-2">
+              <span className="font-medium block mb-1">Customer Ref</span>
+              <span className="text-gray-700">{caseData?.customer_ref || 'N/A'}</span>
+            </p>
+            <p className="mb-2">
+              <span className="font-medium block mb-1">Area</span>
+              <span className="text-gray-700">{caseData?.area || 'N/A'}</span>
+            </p>
+            <p className="mb-2">
+              <span className="font-medium block mb-1">RTOM</span>
+              <span className="text-gray-700">{caseData?.rtom || 'N/A'}</span>
+            </p>
+            <p className="mb-2">
+              <span className="font-medium block mb-1">Arrears amount</span>
+              <span className="text-gray-700">{caseData?.arrears_amount || 'N/A'}</span>
+            </p>
+            <p className="mb-2">
+              <span className="font-medium block mb-1">Action type</span>
+              <span className="text-gray-700">{caseData?.action_type || 'N/A'}</span>
+            </p>
+            <p className="mb-2">
+              <span className="font-medium block mb-1">Last payment date</span>
+              <span className="text-gray-700">
+                {caseData?.last_payment_date ? new Date(caseData.last_payment_date).toLocaleDateString() : 'N/A'}
+              </span>
+            </p>
+            <p className="mb-2">
+              <span className="font-medium block mb-1">Last BSS Reading date</span>
+              <span className="text-gray-700">
+                {caseData?.last_bss_reading_date ? new Date(caseData.last_bss_reading_date).toLocaleDateString() : 'N/A'}
+              </span>
+            </p>
+            <p className="mb-2">
+              <span className="font-medium block mb-1">Current status</span>
+              <span className="text-gray-700">{caseData?.case_current_status || 'N/A'}</span>
+            </p>
+            <p className="mb-2">
+              <span className="font-medium block mb-1">Commission</span>
+              <span className="text-gray-700">{caseData?.commission || 'N/A'}</span>
+            </p>
           </div>
+        </div>
 
-          {/* Case Summary Card */}
-          <div className={`${GlobalStyle.cardContainer} w-64`}>
-            <p className="mb-2">
-              <strong>Case ID:</strong> {caseId}
-            </p>
-            <p className="mb-2">
-              <strong>Created dtm:</strong> {caseData?.created_dtm ? new Date(caseData.created_dtm).toLocaleDateString() : 'N/A'}
-            </p>
-            <p className="mb-2">
-              <strong>Days count:</strong> {caseData?.days_count || 'N/A'}
-            </p>
-          </div>
+        <div className={`${GlobalStyle.cardContainer} w-64`}>
+          <p className="mb-2">
+            <strong>Case ID:</strong> {caseId}
+          </p>
+          <p className="mb-2">
+            <strong>Created dtm:</strong> {caseData?.created_dtm ? new Date(caseData.created_dtm).toLocaleDateString() : 'N/A'}
+          </p>
+          <p className="mb-2">
+            <strong>Days count:</strong> {caseData?.days_count || 'N/A'}
+          </p>
         </div>
       </div>
 
       <div>
-        {/* DRC Dropdown */}
         <div className="flex gap-4 mt-8">
           <select 
             className={`${GlobalStyle.selectBox} w-full`}
@@ -167,7 +180,6 @@ const CaseDetails = () => {
           </select>
         </div>
 
-        {/* DRC Details Card */}
         {showDRCCard && (
           <div className={`${GlobalStyle.cardContainer} mt-8`}>
             {loading ? (
@@ -214,7 +226,6 @@ const CaseDetails = () => {
           </div>
         )}
 
-        {/* Option Dropdowns */}
         {dropdownOptions.map((option, index) => (
           <div key={index} className="flex gap-4 mt-8">
             <select className={`${GlobalStyle.selectBox} w-full`}>
@@ -223,8 +234,56 @@ const CaseDetails = () => {
           </div>
         ))}
       </div>
+    </div>
+  );
 
-      {/* Navigation Buttons */}
+  const renderIncidentDetails = () => (
+    <div className={`${GlobalStyle.cardContainer} mt-4`}>
+      <h3 className="text-xl font-semibold mb-4">Incident Details</h3>
+      <div className="space-y-4">
+        <p className="text-gray-600">Incident information will be displayed here.</p>
+      </div>
+    </div>
+  );
+
+  const renderTabContent = () => {
+    if (loadingTab) {
+      return (
+        <div className="flex justify-center items-center p-8">
+          <div className="animate-pulse text-gray-500">Loading...</div>
+        </div>
+      );
+    }
+    return activeTab === "CaseDetails" ? renderCaseDetails() : renderIncidentDetails();
+  };
+
+  return (
+    <div className={GlobalStyle.fontPoppins}>
+      <div className="flex gap-4 mb-6">
+        <button
+          onClick={() => handleTabChange("CaseDetails")}
+          className={`px-4 py-2 transition-colors duration-200 ${
+            activeTab === "CaseDetails"
+              ? "border-b-2 border-blue-500 font-bold"
+              : "text-gray-500 hover:text-gray-700"
+          }`}
+        >
+          Case Details
+        </button>
+        <button
+          onClick={() => handleTabChange("IncidentDetails")}
+          className={`px-4 py-2 transition-colors duration-200 ${
+            activeTab === "IncidentDetails"
+              ? "border-b-2 border-blue-500 font-bold"
+              : "text-gray-500 hover:text-gray-700"
+          }`}
+        >
+          Incident Details
+        </button>
+      </div>
+
+      {renderTabContent()}
+
       <div className={GlobalStyle.navButtonContainer}>
         <button 
           className={GlobalStyle.navButton}
@@ -244,6 +303,15 @@ const CaseDetails = () => {
 };
 
 export default CaseDetails;
+
+
+
+
+
+
+
+
+
 
 
 // import React, { useState, useEffect } from "react";
