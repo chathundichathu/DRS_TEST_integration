@@ -90,6 +90,12 @@ import RTomInfo from "../pages/rtom/RTomInfo";
 import RTomEditDetails from "../pages/rtom/RTomEditDetails";
 import RTomEnd from "../pages/rtom/RtomEnd";
 
+
+// incident cases
+
+import IncidentCase from "../pages/incident/IncidentCase";
+
+
 const Routers = () => {
   return (
     <Routes>
@@ -111,6 +117,18 @@ const Routers = () => {
       <Route path="/incident/log/case-list" element={<CaseList />} />
       <Route path="/incident/log/file-download" element={<IncidentFileDownload />} />
       <Route path="/incident/log/upload-log" element={<IncidentUploadLog />} />
+
+
+
+
+
+
+
+
+      <Route path = "/incident/case-list" element={<IncidentCase />} />
+     
+
+      
 
       {/* DRC Routes */}
       <Route path="/drc/mediation-board" element={<MediationBoard />} />
