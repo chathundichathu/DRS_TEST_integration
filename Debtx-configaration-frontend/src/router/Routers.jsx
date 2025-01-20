@@ -57,6 +57,8 @@ import DirectLOD from "../pages/incident/log/DirectLOD";
 import DRCcaseList from "../pages/drc/DRCcaseList";
 
 
+
+
 //DRC OWNED
 
 import AssignedCaseListforDRC from "../pages/DRC_Owned/Assigned case list for DRC";
@@ -145,6 +147,8 @@ const Routers = () => {
       <Route path="/drc/case-list" element={<DRCcaseList />} />
 
       <Route path="/drc/logs" element={<Logs />} />
+
+      
       
 
       {/* DRC OWNED  */}
