@@ -96,7 +96,7 @@ import RTomEnd from "../pages/rtom/RtomEnd";
 // incident cases
 
 import IncidentCase from "../pages/incident/IncidentCase";
-import IncidentFilter from "../pages/incident/IncidentFilter";
+import OpenIncident from "../pages/incident/OpenIncident";
 
 
 const Routers = () => {
@@ -129,7 +129,7 @@ const Routers = () => {
 
 
       <Route path = "/incident/case-list" element={<IncidentCase />} />
-      <Route path = "/incident/case-filter" element={<IncidentFilter />} />
+      <Route path = "/incident/open-incident" element={<OpenIncident />} />
      
 
       

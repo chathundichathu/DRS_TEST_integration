@@ -169,7 +169,7 @@ import GlobalStyle from "../../assets/prototype/GlobalStyle";
 import { Link, useNavigate } from "react-router-dom";
 import { FaSearch, FaArrowLeft, FaArrowRight } from "react-icons/fa";
 
-export default function IncidentFilter() {
+export default function OpenIncident() {
   const [error, setError] = useState(""); // for error message
   const [searchQuery, setSearchQuery] = useState(""); // for searching
   const [selectAllData, setSelectAllData] = useState(false);
