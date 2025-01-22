@@ -198,7 +198,7 @@ const handleToDateChange = (date) => {
           
           <button
             className={GlobalStyle.buttonPrimary}
-            onClick={() => window.location.href = '/incident/log/rejectlog'}
+            onClick={() => window.location.href = ''}
           >
             Create task and let me know
           </button>
