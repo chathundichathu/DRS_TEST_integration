@@ -92,6 +92,19 @@ import RTomInfo from "../pages/rtom/RTomInfo";
 import RTomEditDetails from "../pages/rtom/RTomEditDetails";
 import RTomEnd from "../pages/rtom/RtomEnd";
 
+<<<<<<< Updated upstream
+=======
+
+// incident cases
+
+import IncidentCase from "../pages/incident/IncidentCase";
+import OpenIncident from "../pages/incident/OpenIncident";
+import RejectIncident from "../pages/incident/RejectIncident";
+import DirectLODSendingIncident from "../pages/incident/DirectLODSendingIncident";
+
+
+
+>>>>>>> Stashed changes
 const Routers = () => {
   return (
     <Routes>
@@ -114,6 +127,25 @@ const Routers = () => {
       <Route path="/incident/log/file-download" element={<IncidentFileDownload />} />
       <Route path="/incident/log/upload-log" element={<IncidentUploadLog />} />
 
+<<<<<<< Updated upstream
+=======
+
+
+
+
+
+
+
+      <Route path = "/incident/case-list" element={<IncidentCase />} />
+      <Route path = "/incident/open-incident" element={<OpenIncident />} />
+      <Route path = "/incident/reject-incident" element={<RejectIncident />} />
+      <Route path = "/incident/directlod-sending-incident" element={<DirectLODSendingIncident />} />
+      
+     
+
+      
+
+>>>>>>> Stashed changes
       {/* DRC Routes */}
       <Route path="/drc/mediation-board" element={<MediationBoard />} />
       <Route path="/drc/period-extension" element={<PeriodExtensionApproval />} />
