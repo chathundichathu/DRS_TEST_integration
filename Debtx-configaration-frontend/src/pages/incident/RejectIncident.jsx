@@ -19,15 +19,15 @@ export default function DRCcaseList() {
             source_type: "pilot-suspended",
         },
         {
-            id: "RC001",
+            id: "RC002",
             status: "Reject Pending4",
             account_no: "12345",
-            filtered_reason: "Credit-class = VIP",
+            filtered_reason: "Customer Type = slt",
             rejected_on: "2024-11-01",
             source_type: "pilot-suspended",
         },
         {
-            id: "RC001",
+            id: "RC003",
             status: "Reject Pending4",
             account_no: "12345",
             filtered_reason: "Credit-class = VIP",
@@ -43,7 +43,15 @@ export default function DRCcaseList() {
             source_type: "pilot-suspended",
         },
         {
-            id: "RC001",
+            id: "RC003",
+            status: "Reject Pending4",
+            account_no: "12345",
+            filtered_reason: "Customer Type = slt",
+            rejected_on: "2024-11-01",
+            source_type: "pilot-suspended",
+        },
+        {
+            id: "RC002",
             status: "Reject Pending4",
             account_no: "12345",
             filtered_reason: "Credit-class = VIP",
@@ -62,7 +70,7 @@ export default function DRCcaseList() {
             id: "RC001",
             status: "Reject Pending4",
             account_no: "12345",
-            filtered_reason: "Credit-class = VIP",
+            filtered_reason: "Customer segment =2467",
             rejected_on: "2024-11-01",
             source_type: "pilot-suspended",
         },
@@ -86,7 +94,7 @@ export default function DRCcaseList() {
     );
 
     // Pagination state
-    const itemsPerPage = 4;
+    const itemsPerPage = 7;
     const totalPages = Math.ceil(filteredSearchData.length / itemsPerPage);
 
     // Filter handler
@@ -120,37 +128,40 @@ export default function DRCcaseList() {
 
     const handleRowCheckboxChange = (caseId) => {
         if (selectedRows.includes(caseId)) {
-          setSelectedRows(selectedRows.filter((id) => id !== caseId));
+            setSelectedRows(selectedRows.filter((id) => id !== caseId));
         } else {
-          setSelectedRows([...selectedRows, caseId]);
+            setSelectedRows([...selectedRows, caseId]);
         }
-      };
+    };
 
     const handleSelectAllDataChange = () => {
         if (selectAllData) {
-          setSelectedRows([]);
+            setSelectedRows([]);
         } else {
-          setSelectedRows(data.map((row) => row.caseId));
+            setSelectedRows(data.map((row) => row.caseId));
         }
         setSelectAllData(!selectAllData);
-      };
+    };
 
     return (
         <div className={`p-4 ${GlobalStyle.fontPoppins}`}>
             <div className="flex justify-between items-center w-full">
-  <h1 className={`${GlobalStyle.headingLarge} m-0`}>Incidents Open for Distribution</h1>
-  <Link
-    className={`${GlobalStyle.buttonPrimary}`}
-    to="/lod/ftllod/ftllod/downloadcreateftllod"
-  >
-    Create task and let me know
-  </Link>
-</div>
+                <h1 className={`${GlobalStyle.headingLarge} m-0`}>Incidents Open for Distribution</h1>
+                <Link
+                    className={`${GlobalStyle.buttonPrimary}`}
+                    to="/lod/ftllod/ftllod/downloadcreateftllod"
+                >
+                    Create task and let me know
+                </Link>
+            </div>
 
             {/* Filter Section */}
             <div className="flex justify-end gap-10 my-12">
+            
                 <div className="flex flex-col">
+                    
                     <div className="flex flex-col mb-4">
+                        
                         <div className={GlobalStyle.datePickerContainer}>
                             <label className={GlobalStyle.dataPickerDate}>Date </label>
                             <DatePicker
@@ -168,6 +179,7 @@ export default function DRCcaseList() {
                                 className={GlobalStyle.inputText}
                             />
                         </div>
+
                     </div>
                 </div>
                 <button
@@ -215,7 +227,7 @@ export default function DRCcaseList() {
                                     Source Type
                                 </th>
                                 <th scope="col" className={GlobalStyle.tableHeader}></th>
-                                
+
                             </tr>
                         </thead>
                         <tbody>
@@ -223,29 +235,29 @@ export default function DRCcaseList() {
                                 <tr
                                     key={index}
                                     className={`${index % 2 === 0
-                                            ? "bg-white bg-opacity-75"
-                                            : "bg-gray-50 bg-opacity-50"
+                                        ? "bg-white bg-opacity-75"
+                                        : "bg-gray-50 bg-opacity-50"
                                         } border-b`}
                                 >
                                     <td className={GlobalStyle.tableData}>
-                    <input
-                      type="checkbox"
-                      className={"rounded-lg"}
-                      checked={selectedRows.includes(row.caseId)}
-                      onChange={() => handleRowCheckboxChange(row.caseId)}
-                    />
-                  </td>
-                  <td className={GlobalStyle.tableData}>
-                    <a href={`#${row.id}`} className="hover:underline">
-                      {row.id}
-                    </a>
-                  </td>
+                                        <input
+                                            type="checkbox"
+                                            className={"rounded-lg"}
+                                            checked={selectedRows.includes(row.caseId)}
+                                            onChange={() => handleRowCheckboxChange(row.caseId)}
+                                        />
+                                    </td>
+                                    <td className={GlobalStyle.tableData}>
+                                        <a href={`#${row.id}`} className="hover:underline">
+                                            {row.id}
+                                        </a>
+                                    </td>
                                     <td className={GlobalStyle.tableData}>{row.status}</td>
                                     <td className={GlobalStyle.tableData}>{row.account_no}</td>
                                     <td className={GlobalStyle.tableData}>{row.filtered_reason}</td>
                                     <td className={GlobalStyle.tableData}>{row.rejected_on}</td>
                                     <td className={GlobalStyle.tableData}>{row.source_type}</td>
-                                    <td className={GlobalStyle.tableData}> 
+                                    <td className={GlobalStyle.tableData}>
                                         <div className="flex justify-center gap-2">
                                             <button
                                                 className={GlobalStyle.buttonPrimary} // Prevents text from wrapping
@@ -261,24 +273,24 @@ export default function DRCcaseList() {
                     </table>
                 </div>
                 <div className="flex justify-end items-center w-full mt-6">
-        {/* Select All Data Checkbox */}
-        <label className="flex items-center gap-2">
-          <input
-            type="checkbox"
-            className="rounded-lg"
-            checked={selectAllData}
-            onChange={handleSelectAllDataChange}
-          />
-          Reject all
-        </label>
+                    {/* Select All Data Checkbox */}
+                    <label className="flex items-center gap-2">
+                        <input
+                            type="checkbox"
+                            className="rounded-lg"
+                            checked={selectAllData}
+                            onChange={handleSelectAllDataChange}
+                        />
+                        Reject all
+                    </label>
 
-        <Link
-          className={`${GlobalStyle.buttonPrimary} ml-4`}
-          to="/lod/ftllod/ftllod/downloadcreateftllod"
-        >
-         More Forward
-        </Link>
-      </div>
+                    <Link
+                        className={`${GlobalStyle.buttonPrimary} ml-4`}
+                        to="/lod/ftllod/ftllod/downloadcreateftllod"
+                    >
+                        More Forward
+                    </Link>
+                </div>
             </div>
 
             {/* Pagination Section */}
