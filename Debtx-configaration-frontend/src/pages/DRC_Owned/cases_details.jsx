@@ -549,7 +549,7 @@ const CaseDetails = () => {
 
       {renderTabContent()}
 
-      <div className={GlobalStyle.navButtonContainer}>
+      {/* <div className={GlobalStyle.navButtonContainer}>
         <button 
           className={GlobalStyle.navButton}
           onClick={handleBackClick}
@@ -562,7 +562,7 @@ const CaseDetails = () => {
         >
           Download
         </button>
-      </div>
+      </div> */}
     </div>
   );
 };
