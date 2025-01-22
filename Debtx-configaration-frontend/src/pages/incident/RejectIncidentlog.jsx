@@ -209,6 +209,3 @@ const handleToDateChange = (date) => {
 };
 
 export default RejectIncidentlog;
-
-
-

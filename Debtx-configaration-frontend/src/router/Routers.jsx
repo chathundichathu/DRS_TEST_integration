@@ -102,6 +102,8 @@ import OpenIncident from "../pages/incident/OpenIncident";
 import RejectIncident from "../pages/incident/RejectIncident";
 import DirectLODSendingIncident from "../pages/incident/DirectLODSendingIncident";
 import RejectIncidentlog from "../pages/incident/RejectIncidentlog";
+import CollectOnlyCPECollect from "../pages/incident/CollectOnlyCPECollect";
+
 
 const Routers = () => {
   return (
@@ -138,6 +140,7 @@ const Routers = () => {
       <Route path = "/incident/reject-incident" element={<RejectIncident />} />
       <Route path = "/incident/directlod-sending-incident" element={<DirectLODSendingIncident />} />
       <Route path = "/incident/reject-incident-log" element={<RejectIncidentlog />} />
+      <Route path = "/incident/collect-only-cpe-collect" element={<CollectOnlyCPECollect />} />
      
 
       
