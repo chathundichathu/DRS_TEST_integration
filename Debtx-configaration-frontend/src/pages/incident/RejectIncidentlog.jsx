@@ -202,20 +202,12 @@ const handleToDateChange = (date) => {
             className={GlobalStyle.buttonPrimary}
             onClick={() => window.location.href = '/incident/log/rejectlog'}
           >
-            Reject All
+           Create task
           </button>
-          <button
-            className={GlobalStyle.buttonPrimary}
-            onClick={() => window.location.href = '/pages/incident/details'}
-          >
-            Move Forward
-          </button>
+         
         </div>
       </div>
   );
 };
 
 export default RejectIncidentlog;
-
-
-
