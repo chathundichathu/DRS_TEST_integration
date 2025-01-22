@@ -287,6 +287,14 @@ const CaseDetails = () => {
   const [error, setError] = useState("");
   const [activeTab, setActiveTab] = useState("CaseDetails");
   const [loadingTab, setLoadingTab] = useState(false);
+  const [showSection, setShowSection] = useState({
+    contact: false,
+    product: false,
+    customer: false,
+    account: false,
+    last_actions: false,
+    marketing_details: false,
+  });
 
   useEffect(() => {
     if (caseId) {
@@ -302,6 +310,18 @@ const CaseDetails = () => {
 
   const handleDownloadClick = () => {
     setShowDRCCard(!showDRCCard);
+  };
+
+  const toggleSection = (section) => {
+    const allClosed = Object.keys(showSection).reduce((acc, key) => {
+      acc[key] = false;
+      return acc;
+    }, {});
+    
+    setShowSection({
+      ...allClosed,
+      [section]: !showSection[section]
+    });
   };
 
   const handleTabChange = async (tab) => {
