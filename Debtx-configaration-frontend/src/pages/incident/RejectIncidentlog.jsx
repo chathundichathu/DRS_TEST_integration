@@ -195,21 +195,14 @@ const handleToDateChange = (date) => {
 
         {/* Download, Reject All, Move Forward Buttons */}
         <div className="mt-8 flex justify-end items-center gap-6">
-          <div className="flex items-center">
-            <FaDownload size={30} className="text-blue-600 cursor-pointer" />
-          </div>
+          
           <button
             className={GlobalStyle.buttonPrimary}
             onClick={() => window.location.href = '/incident/log/rejectlog'}
           >
-            Reject All
+            Create task and let me know
           </button>
-          <button
-            className={GlobalStyle.buttonPrimary}
-            onClick={() => window.location.href = '/pages/incident/details'}
-          >
-            Move Forward
-          </button>
+          
         </div>
       </div>
   );

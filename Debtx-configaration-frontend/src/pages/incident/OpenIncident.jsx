@@ -41,55 +41,9 @@ export default function OpenIncident() {
         action : "arreas collect",
         amount : "5000",
         source_type :"product terminal"
-    },
-    {
-        id : "RC001",
-        status : "open no agent",
-        account_number : "0115678",
-        action : "arreas collect",
-        amount : "4000",
-        source_type :"pilot - suspended"
-    },
-    {
-        id : "RC001",
-        status : "open no agent",
-        account_number : "0115678",
-        action : "arreas collect",
-        amount : "60000",
-        source_type :"pilot - suspended"
-    },
-    {
-        id : "RC001",
-        status : "open no agent",
-        account_number : "0115678",
-        action : "arreas collect",
-        amount : "54000",
-        source_type :"pilot - suspended"
-    },
-    {
-        id : "RC001",
-        status : "open no agent",
-        account_number : "0115678",
-        action : "arreas collect",
-        amount : "56000",
-        source_type :"special"
-    },
-    {
-        id : "RC001",
-        status : "open no agent",
-        account_number : "0115678",
-        action : "arreas collect",
-        amount : "54000",
-        source_type :"pilot - suspended"
-    },
-    {
-        id : "RC001",
-        status : "open no agent",
-        account_number : "0115678",
-        action : "arreas collect",
-        amount : "60000",
-        source_type :"special"
-    },
+    }
+    
+   
   ];
 
   const filteredData = data.filter((row) =>
