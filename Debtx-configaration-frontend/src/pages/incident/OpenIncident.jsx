@@ -1,169 +1,3 @@
-/*Purpose: This template is used for the 1.7.1-incident filter(open incidnet),1.7.2- (rejected incident),1.9-direct LOD and 1.7.3 Collect CPE
-Created Date: 2025-01-07
-Created By: Naflan (naflanm084@gmail.com)
-Last Modified Date: 2025-01-09
-Version: node 20
-ui number : 1.7.1, 1.7.2, 1.9 and 1.7.3
-Dependencies: tailwind css
-Related Files: (routes)
-Notes: The following page conatins the code for open incidnet,rejected incident,direct LOD and Collect CPE the UI's 
-*/
-
-// import React, { useState } from "react";
-// import GlobalStyle from "../../assets/prototype/GlobalStyle";
-// import { FaSearch, FaArrowLeft, FaArrowRight } from "react-icons/fa";
-// import DatePicker from "react-datepicker";
-// import "react-datepicker/dist/react-datepicker.css";
-
-// const IncidentFilter = () => {
-//   const [activeTab, setActiveTab] = useState("OpenIncidents");
-//   const [currentPage, setCurrentPage] = useState(1);
-//   const [selectedRows, setSelectedRows] = useState([]);
-//   const [source, setSource] = useState("");
-//   const [fromDate, setFromDate] = useState(null);
-//   const [toDate, setToDate] = useState(null);
-//   const [error, setError] = useState("");
-//   const [searchQuery, setSearchQuery] = useState("");
-//   const rowsPerPage = 4;
-  
-//   const handleProceedAll = () => {
-//     alert("Proceed All clicked");
-//   };
-
-//   // Data for Open Incidents
-//   const openIncidents = [
-//     { id: "RC001", Status: "0115678", accountNo: "Arrears Collect", action: "54,000", amount: "Open" },
-//     { id: "RC002", Status: "8765946", accountNo: "Arrears Collect", action: "-", amount: "Open" },
-//   ];
-  
-
- 
-
-//   const renderTableContent = () => {
-//     let dataToDisplay = [];
-//     if (activeTab === "OpenIncidents") {
-//       dataToDisplay = openIncidents;
-//     } else if (activeTab === "RejectedIncidents") {
-//       dataToDisplay = rejectedIncidents;
-//     } else if (activeTab === "DirectLOD") {
-//       dataToDisplay = directLODData;
-//     } else if (activeTab === "CollectCPE") {
-//       dataToDisplay = collectCPEData;
-//     }
-
-//     const indexOfLastRow = currentPage * rowsPerPage;
-//     const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-//     const currentRows = dataToDisplay.slice(indexOfFirstRow, indexOfLastRow);
-
-//     //Handle individual row checkbox change
-//       const handleRowCheckboxChange = (caseId) => {
-//         if (selectedRows.includes(caseId)) {
-//           setSelectedRows(selectedRows.filter((id) => id !== caseId));
-//         } else {
-//           setSelectedRows([...selectedRows, caseId]);
-//         }
-//       };
-      
-//       const handleSelectAllDataChange = () => {
-//         if (selectedRows.length === displayedData.length) {
-//           setSelectedRows([]);
-//         } else {
-//           const allRowIds = displayedData.map((row) => row.id);
-//           setSelectedRows(allRowIds);
-//         }
-//       };
-
-//       {/* Reject function */}
-//     // const handleReject = (id) => {
-//     //   alert(`Reject clicked for ID: ${id}`);
-//     // };
-  
-//     {/* Reject All function */}
-//     // const handleRejectAll = () => {
-//     //   alert('Reject All clicked');
-//     // };
-
-//     // move forward function
-//     // const handleMoveForward = () => {
-//     //     alert('Move Forward clicked');
-//     // };
-
-//     // Table structure for Direct LOD and Collect CPE tabs
-//       return (
-//         <>
-//           {/* table */}
-//           <div className={GlobalStyle.tableContainer}>
-//             <table className={GlobalStyle.table}>
-//               <thead className={GlobalStyle.thead}>
-//                 <tr>
-//                   <th className={GlobalStyle.tableHeader}></th>
-//                   <th className={GlobalStyle.tableHeader}>ID</th>
-//                   <th className={GlobalStyle.tableHeader}>Status</th>
-//                   {activeTab === "DirectLOD" ? (
-//                     <>
-//                       <th className={GlobalStyle.tableHeader}>Account No</th>
-//                       <th className={GlobalStyle.tableHeader}>Amount</th>
-//                     </>
-//                   ) : (
-//                     <>
-//                       <th className={GlobalStyle.tableHeader}>Account No</th>
-//                       <th className={GlobalStyle.tableHeader}>Action</th>
-//                     </>
-//                   )}
-//                   <th className={GlobalStyle.tableHeader}></th>
-//                 </tr>
-//               </thead>
-//               <tbody>
-//                 {currentRows.map((row, index) => (
-//                   <tr
-//                     key={index}
-//                     className={`${
-//                       index % 2 === 0
-//                         ? "bg-white bg-opacity-75"
-//                         : "bg-gray-50 bg-opacity-50"
-//                     } border-b`}
-//                   >
-//                     <td className={GlobalStyle.tableData}>
-//                       <input
-//                         type="checkbox"
-//                         className="rounded-lg"
-//                         checked={selectedRows.includes(row.id)}
-//                         onChange={() => handleRowCheckboxChange(row.id)}
-//                       />
-//                     </td>
-//                     <td className={GlobalStyle.tableData}>{row.id}</td>
-//                     <td className={GlobalStyle.tableData}>{row.Status}</td>
-//                     {activeTab === "DirectLOD" ? (
-//                       <> 
-//                         <td className={GlobalStyle.tableData}>{row.accountNo}</td>
-//                         <td className={GlobalStyle.tableData}>{row.amount}</td>
-//                       </>
-//                     ) : (
-//                       <>
-//                         <td className={GlobalStyle.tableData}>{row.accountNo}</td>
-//                         <td className={GlobalStyle.tableData}>{row.action}</td>
-//                       </>
-//                     )}
-//                   </tr>
-//                 ))}
-//                 {currentRows.length === 0 && (
-//                   <tr>
-//                     <td colSpan="5" className="text-center py-4">
-//                       No results found
-//                     </td>
-//                   </tr>
-//                 )}
-//               </tbody>
-//             </table>
-//           </div>
-//         </>
-//       );   
-//   };
-//   const handleCreateTask = () => {
-//     alert("Clicked create task and let me know!");
-//   };
-// }
-
 import { useState } from "react";
 import GlobalStyle from "../../assets/prototype/GlobalStyle";
 import { Link, useNavigate } from "react-router-dom";
@@ -461,3 +295,88 @@ export default function OpenIncident() {
     </>
   );    
 }   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// <div className={GlobalStyle.tableContainer}>
+//                     <table className={GlobalStyle.table}>
+//                         <thead className={GlobalStyle.thead}>
+//                             <tr>
+//                                 <th scope="col" className={GlobalStyle.tableHeader}></th>
+//                                 <th scope="col" className={GlobalStyle.tableHeader}>
+//                                     ID
+//                                 </th>
+//                                 <th scope="col" className={GlobalStyle.tableHeader}>
+//                                     Status
+//                                 </th>
+//                                 <th scope="col" className={GlobalStyle.tableHeader}>
+//                                     Account No
+//                                 </th>
+//                                 <th scope="col" className={GlobalStyle.tableHeader}>
+//                                     Action
+//                                 </th>
+//                                 <th scope="col" className={GlobalStyle.tableHeader}>
+//                                     Amount
+//                                 </th>
+//                                 <th scope="col" className={GlobalStyle.tableHeader}>
+//                                     Source Type
+//                                 </th>
+//                             </tr>
+//                         </thead>
+//                         <tbody>
+//                             {paginatedData.map((row, index) => (
+//                                 <tr
+//                                     key={index}
+//                                     className={`${index % 2 === 0
+//                                             ? "bg-white bg-opacity-75"
+//                                             : "bg-gray-50 bg-opacity-50"
+//                                         } border-b`}
+//                                 >
+//                                     <td className={GlobalStyle.tableData}>
+//                                         <input
+//                                             type="checkbox"
+//                                             className={"rounded-lg"}
+//                                             checked={selectedRows.includes(row.caseId)}
+//                                             onChange={() => handleRowCheckboxChange(row.caseId)}
+//                                         />
+//                                     </td>
+//                                     <td className={GlobalStyle.tableData}>
+//                                         <a href={`#${row.id}`} className="hover:underline">
+//                                             {row.id}
+//                                         </a>
+//                                     </td>
+//                                     <td className={GlobalStyle.tableData}>{row.status}</td>
+//                                     <td className={GlobalStyle.tableData}>{row.account_number}</td>
+//                                     <td className={GlobalStyle.tableData}>{row.action}</td>
+//                                     <td className={GlobalStyle.tableData}>{row.amount}</td>
+//                                     <td className={GlobalStyle.tableData}>{row.source_type}</td>
+
+//                                 </tr>
+//                             ))}
+//                             {paginatedData.length === 0 && (
+//                                 <tr>
+//                                     <td colSpan="6" className="text-center py-4">
+//                                         No results found
+//                                     </td>
+//                                 </tr>
+//                             )}
+//                         </tbody>
+//                     </table>
+
+
+//                 </div>

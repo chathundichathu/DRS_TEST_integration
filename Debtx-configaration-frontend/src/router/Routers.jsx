@@ -3,6 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import Dashboard from "../pages/Dashboard";
 import PrototypeA from "../assets/prototype/prototypeA";
 import PrototypeB from "../assets/prototype/prototypeB";
+import PrototypeC from "../assets/prototype/prototypeC";
 import Individual from "../pages/incident/register/Individual";
 import Bulk from "../pages/incident/register/Bulk";
 import IncidentLog from "../pages/incident/log/IncidentLog";
@@ -97,6 +98,8 @@ import RTomEnd from "../pages/rtom/RtomEnd";
 
 import IncidentCase from "../pages/incident/IncidentCase";
 import OpenIncident from "../pages/incident/OpenIncident";
+import RejectIncident from "../pages/incident/RejectIncident";
+import DirectLODSendingIncident from "../pages/incident/DirectLODSendingIncident";
 
 
 const Routers = () => {
@@ -106,6 +109,7 @@ const Routers = () => {
       <Route path="/" element={<Dashboard />} />
       <Route path="/prototypeA" element={<PrototypeA />} />
       <Route path="/prototypeB" element={<PrototypeB />} />
+      <Route path="/prototypeC" element={<PrototypeC />} />
 
       {/* Incident Routes */}
       <Route path="/incident/register/individual" element={<Individual />} />
@@ -130,6 +134,8 @@ const Routers = () => {
 
       <Route path = "/incident/case-list" element={<IncidentCase />} />
       <Route path = "/incident/open-incident" element={<OpenIncident />} />
+      <Route path = "/incident/reject-incident" element={<RejectIncident />} />
+      <Route path = "/incident/directlod-sending-incident" element={<DirectLODSendingIncident />} />
      
 
       
