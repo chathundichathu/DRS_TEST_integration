@@ -299,13 +299,6 @@ export const listIncident = async (req, res) => {
 
 
 
-
-
-
-
-
-
-
 export const getIncidentDetailsByCaseID = async (req, res) => {
   const { case_id } = req.body;
   
