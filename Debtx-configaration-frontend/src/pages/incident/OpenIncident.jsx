@@ -4,7 +4,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { FaSearch, FaArrowLeft, FaArrowRight } from "react-icons/fa";
 
 export default function OpenIncident() {
-  const [error, setError] = useState(""); // for error message
   const [searchQuery, setSearchQuery] = useState(""); // for searching
   const [selectAllData, setSelectAllData] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
@@ -27,7 +26,7 @@ export default function OpenIncident() {
       source_type :"pilot - suspended"
     },
     {
-        id : "RC001",
+        id : "RC002",
         status : "open no agent",
         account_number : "0115678",
         action : "arreas collect",
@@ -35,15 +34,61 @@ export default function OpenIncident() {
         source_type :"special"
     },
     {
-        id : "RC001",
+        id : "RC003",
         status : "open no agent",
         account_number : "0115678",
         action : "arreas collect",
         amount : "5000",
         source_type :"product terminal"
-    }
-    
-   
+    },
+    {
+        id : "RC004",
+        status : "open no agent",
+        account_number : "0115678",
+        action : "arreas collect",
+        amount : "4000",
+        source_type :"pilot - suspended"
+    },
+    {
+        id : "RC005",
+        status : "open no agent",
+        account_number : "0115678",
+        action : "arreas collect",
+        amount : "60000",
+        source_type :"pilot - suspended"
+    },
+    {
+        id : "RC006",
+        status : "open no agent",
+        account_number : "0115678",
+        action : "arreas collect",
+        amount : "54000",
+        source_type :"pilot - suspended"
+    },
+    {
+        id : "RC007",
+        status : "open no agent",
+        account_number : "0115678",
+        action : "arreas collect",
+        amount : "56000",
+        source_type :"special"
+    },
+    {
+        id : "RC008",
+        status : "open no agent",
+        account_number : "0115678",
+        action : "arreas collect",
+        amount : "54000",
+        source_type :"pilot - suspended"
+    },
+    {
+        id : "RC009",
+        status : "open no agent",
+        account_number : "0115678",
+        action : "arreas collect",
+        amount : "60000",
+        source_type :"special"
+    },
   ];
 
   const filteredData = data.filter((row) =>
@@ -96,10 +141,10 @@ export default function OpenIncident() {
   return (  
     <>
 
-<div className={`p-4 ${GlobalStyle.fontPoppins}`}>
+<div className={GlobalStyle.fontPoppins}>
     
 <div className="flex justify-between items-center w-full">
-  <h1 className={`${GlobalStyle.headingLarge} m-0`}>Incidents Open for Distribution</h1>
+  <h1 className={`${GlobalStyle.headingLarge} m-0 mb-4`}>Incidents Open for Distribution</h1>
   <Link
     className={`${GlobalStyle.buttonPrimary}`}
     to="/lod/ftllod/ftllod/downloadcreateftllod"
@@ -225,6 +270,28 @@ export default function OpenIncident() {
 
           
           </div>
+          {/* Navigation Buttons */}
+      {filteredData.length > rowsPerPage && (
+        <div className={GlobalStyle.navButtonContainer}>
+          <button
+            className={GlobalStyle.navButton}
+            onClick={handlePrevPage}
+            disabled={currentPage === 0}
+          >
+            <FaArrowLeft />
+          </button>
+          <span>
+            Page {currentPage + 1} of {pages}
+          </span>
+          <button
+            className={GlobalStyle.navButton}
+            onClick={handleNextPage}
+            disabled={currentPage === pages - 1}
+          >
+            <FaArrowRight />
+          </button>
+        </div>
+      )}
 
           <div className="flex justify-end items-center w-full mt-6">
         {/* Select All Data Checkbox */}

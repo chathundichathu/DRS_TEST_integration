@@ -400,66 +400,66 @@ const CaseDetails = () => {
   const renderCaseDetails = () => (
     <div>
       <div className="w-64 ml-auto">
-        <p className="mb-2">
-          <strong>Case ID&nbsp;:&nbsp;</strong> {caseId}
-        </p>
-        <p className="mb-2">
-          <strong>Created dtm&nbsp;:&nbsp;</strong> {caseData?.created_dtm ? new Date(caseData.created_dtm).toLocaleDateString() : 'N/A'}
-        </p>
-        <p className="mb-2">
-          <strong>Days count&nbsp;:&nbsp;</strong> {caseData?.days_count || 'N/A'}
-        </p>
-      </div>
+  <p className="mb-2">
+    <strong>Case ID&nbsp;:&nbsp;</strong> {caseId}
+  </p>
+  <p className="mb-2">
+    <strong>Created dtm&nbsp;:&nbsp;</strong> {caseData?.created_dtm ? new Date(caseData.created_dtm).toLocaleDateString() : 'N/A'}
+  </p>
+  <p className="mb-2">
+    <strong>Days count&nbsp;:&nbsp;</strong> {caseData?.days_count || 'N/A'}
+  </p>
+</div>
 
-      <div className={`${GlobalStyle.cardContainer} w-full p-4 bg-white shadow-md rounded-md`}>
-        <div className="grid grid-cols-2 gap-x-6 gap-y-4">
-          <p className="flex items-center">
-            <span className="font-medium">Account No&nbsp;:&nbsp;</span>
-            <span className="text-gray-700">{caseData?.account_no || 'N/A'}</span>
-          </p>
-          <p className="flex items-center">
-            <span className="font-medium">Customer Ref&nbsp;:&nbsp;</span>
-            <span className="text-gray-700">{caseData?.customer_ref || 'N/A'}</span>
-          </p>
-          <p className="flex items-center">
-            <span className="font-medium">Area&nbsp;:&nbsp;</span>
-            <span className="text-gray-700">{caseData?.area || 'N/A'}</span>
-          </p>
-          <p className="flex items-center">
-            <span className="font-medium">RTOM&nbsp;:&nbsp;</span>
-            <span className="text-gray-700">{caseData?.rtom || 'N/A'}</span>
-          </p>
-          <p className="flex items-center">
-            <span className="font-medium">Arrears Amount&nbsp;:&nbsp;</span>
-            <span className="text-gray-700">{caseData?.arrears_amount || 'N/A'}</span>
-          </p>
-          <p className="flex items-center">
-            <span className="font-medium">Action Type&nbsp;:&nbsp;</span>
-            <span className="text-gray-700">{caseData?.action_type || 'N/A'}</span>
-          </p>
-          <p className="flex items-center">
-            <span className="font-medium">Last Payment Date&nbsp;:&nbsp;</span>
-            <span className="text-gray-700">
-              {caseData?.last_payment_date ? new Date(caseData.last_payment_date).toLocaleDateString() : 'N/A'}
-            </span>
-          </p>
-          <p className="flex items-center">
-            <span className="font-medium">Last BSS Reading Date&nbsp;:&nbsp;</span>
-            <span className="text-gray-700">
-              {caseData?.last_bss_reading_date ? new Date(caseData.last_bss_reading_date).toLocaleDateString() : 'N/A'}
-            </span>
-          </p>
-          <p className="flex items-center">
-            <span className="font-medium">Current Status&nbsp;:&nbsp;</span>
-            <span className="text-gray-700">{caseData?.case_current_status || 'N/A'}</span>
-          </p>
-          <p className="flex items-center">
-            <span className="font-medium">Commission&nbsp;:&nbsp;</span>
-            <span className="text-gray-700">{caseData?.commission || 'N/A'}</span>
-          </p>
-        </div>
-      </div>
-
+        
+<div className={`${GlobalStyle.cardContainer} w-full p-4 bg-white shadow-md rounded-md`}>
+  <div className="grid grid-cols-2 gap-x-6 gap-y-4">
+    <p className="flex items-center">
+      <span className="font-medium">Account No&nbsp;:&nbsp;</span>
+      <span className="text-gray-700">{caseData?.account_no || 'N/A'}</span>
+    </p>
+    <p className="flex items-center">
+      <span className="font-medium">Customer Ref&nbsp;:&nbsp;</span>
+      <span className="text-gray-700">{caseData?.customer_ref || 'N/A'}</span>
+    </p>
+    <p className="flex items-center">
+      <span className="font-medium">Area&nbsp;:&nbsp;</span>
+      <span className="text-gray-700">{caseData?.area || 'N/A'}</span>
+    </p>
+    <p className="flex items-center">
+      <span className="font-medium">RTOM&nbsp;:&nbsp;</span>
+      <span className="text-gray-700">{caseData?.rtom || 'N/A'}</span>
+    </p>
+    <p className="flex items-center">
+      <span className="font-medium">Arrears Amount&nbsp;:&nbsp;</span>
+      <span className="text-gray-700">{caseData?.arrears_amount || 'N/A'}</span>
+    </p>
+    <p className="flex items-center">
+      <span className="font-medium">Action Type&nbsp;:&nbsp;</span>
+      <span className="text-gray-700">{caseData?.action_type || 'N/A'}</span>
+    </p>
+    <p className="flex items-center">
+      <span className="font-medium">Last Payment Date&nbsp;:&nbsp;</span>
+      <span className="text-gray-700">
+        {caseData?.last_payment_date ? new Date(caseData.last_payment_date).toLocaleDateString() : 'N/A'}
+      </span>
+    </p>
+    <p className="flex items-center">
+      <span className="font-medium">Last BSS Reading Date&nbsp;:&nbsp;</span>
+      <span className="text-gray-700">
+        {caseData?.last_bss_reading_date ? new Date(caseData.last_bss_reading_date).toLocaleDateString() : 'N/A'}
+      </span>
+    </p>
+    <p className="flex items-center">
+      <span className="font-medium">Current Status&nbsp;:&nbsp;</span>
+      <span className="text-gray-700">{caseData?.case_current_status || 'N/A'}</span>
+    </p>
+    <p className="flex items-center">
+      <span className="font-medium">Commission&nbsp;:&nbsp;</span>
+      <span className="text-gray-700">{caseData?.commission || 'N/A'}</span>
+    </p>
+  </div>
+</div>
       <div>
         <div className="flex gap-4 mt-8">
           <select 
