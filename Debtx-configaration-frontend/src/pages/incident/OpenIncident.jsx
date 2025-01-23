@@ -2,6 +2,8 @@ import { useState } from "react";
 import GlobalStyle from "../../assets/prototype/GlobalStyle";
 import { Link, useNavigate } from "react-router-dom";
 import { FaSearch, FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import Open_No_Agent from "../../assets/images/Open_No_Agent.png"
+
 
 export default function OpenIncident() {
   const [searchQuery, setSearchQuery] = useState(""); // for searching
@@ -250,6 +252,20 @@ export default function OpenIncident() {
                       {row.id}
                     </a>
                   </td>
+                  <td className={GlobalStyle.tableData}>
+  <div className="flex justify-center items-center h-full">
+    {row.status === "open no agent" && (
+      <div title="open no agent" aria-label="open no agent">
+        <img
+          src={Open_No_Agent}
+          alt="open no agent"
+          className="w-5 h-5"
+        />
+      </div>
+    )}
+  </div>
+</td>
+
                   <td className={GlobalStyle.tableData}>{row.status}</td>
                   <td className={GlobalStyle.tableData}>{row.account_number}</td>
                   <td className={GlobalStyle.tableData}>{row.action}</td>

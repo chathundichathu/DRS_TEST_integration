@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom'; // Importing useNavigate from re
 import DatePicker from 'react-datepicker';
 import GlobalStyle from "../../assets/prototype/GlobalStyle.jsx";
 import 'react-datepicker/dist/react-datepicker.css';
+import Incident_Reject from "../../assets/images/Incident_Reject.png"
 
 const RejectIncidentlog = () => {
   const [source, setSource] = useState('');
@@ -174,6 +175,15 @@ const handleToDateChange = (date) => {
                     className="form-checkbox w-6 h-6"
                   />
                 </td>
+                <td className={`${GlobalStyle.tableData} flex items-center justify-center`}>
+  {incident.status === "Incident Reject" && (
+    <img
+      src={Incident_Reject}
+      alt="Incident Reject"
+      className="w-5 h-5"
+    />
+  )}
+</td>
                 <td className={`${GlobalStyle.tableData} text-blue-600 hover:underline cursor-pointer `} >{incident.id}</td>
                 <td className={GlobalStyle.tableData}>{incident.accountNo}</td>
                 <td className={GlobalStyle.tableData}>{incident.reason}</td>
