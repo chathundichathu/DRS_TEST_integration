@@ -1,222 +1,305 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import { FaArrowLeft, FaArrowRight, FaSearch } from "react-icons/fa";
 import { useNavigate, Link } from "react-router-dom";
 import GlobalStyle from "../../assets/prototype/GlobalStyle.jsx";
 
-export default function DirectLODSendingIncident() {
-    const navigate = useNavigate();
+export default function CollectOnlyCPECollect() {
+  const navigate = useNavigate();
 
-    // Table data exactly matching the image
-    const tableData = [
-        {
-            id: "RC001",
-            status: "Direct LOD",
-            account_no: "0115678",
-            action : "collect CPE"
-        },
-        {
-            id: "RC001",
-            status: "Direct LOD",
-            account_no: "8765946",
-            action : "collect CPE"
-        },
-        {
-            id: "RC001",
-            status: "Direct LOD",
-            account_no: "3754918",
-            action : "collect CPE"
-        }
-    ];
+  // Table data exactly matching the image
+  const tableData = [
+    {
+      id: "C001",
+      status: "Direct LOD",
+      account_no: "0115678",
+      amount: "500",
+      source_type: "Pilot - Suspended",
+    },
+    {
+      id: "C002",
+      status: "Direct LOD",
+      account_no: "8765946",
+      amount: "590",
+      source_type: "Special",
+    },
+    {
+      id: "C003",
+      status: "Direct LOD",
+      account_no: "3754918",
+      amount: "900",
+      source_type: "Product Terminate",
+    },
+  ];
 
-    // Filter state
-    const [startDate, setStartDate] = useState(null);
-    const [endDate, setEndDate] = useState(null);
-    const [filteredData, setFilteredData] = useState(tableData);
-    const [selectAllData, setSelectAllData] = useState(false);
-    const [selectedRows, setSelectedRows] = useState([]);
-    const [searchQuery, setSearchQuery] = useState("");
-    const [currentPage, setCurrentPage] = useState(0); // Changed to 0-based indexing
-    const [selectedSource, setSelectedSource] = useState("");
+  // Filter state
+  const [fromDate, setFromDate] = useState(null); //for date
+  const [toDate, setToDate] = useState(null);
+  const [error, setError] = useState("");
+  const [selectAllData, setSelectAllData] = useState(false);
+  const [selectedRows, setSelectedRows] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(0); // Changed to 0-based indexing
+  const [selectedSource, setSelectedSource] = useState("");
 
-    const rowsPerPage = 7; // Number of rows per page
+  const rowsPerPage = 7; // Number of rows per page
 
-    // Filter data based on search query
-    const filteredSearchData = filteredData.filter((row) =>
-        Object.values(row)
-            .join(" ")
-            .toLowerCase()
-            .includes(searchQuery.toLowerCase())
-    );
+  // validation for date
+  const handleFromDateChange = (date) => {
+    if (toDate && date > toDate) {
+      setError("The 'From' date cannot be later than the 'To' date.");
+    } else {
+      setError("");
+      setFromDate(date);
+    }
+  };
 
-    // Calculate total pages
-    const pages = Math.ceil(filteredSearchData.length / rowsPerPage);
+  // validation for date
+  const handleToDateChange = (date) => {
+    if (fromDate && date < fromDate) {
+      setError("The 'To' date cannot be earlier than the 'From' date.");
+    } else {
+      setError("");
+      setToDate(date);
+    }
+  };
 
-    // Get paginated data
-    const paginatedData = filteredSearchData.slice(
-        currentPage * rowsPerPage,
-        (currentPage + 1) * rowsPerPage
-    );
+  //search fuction
+  const filteredData = tableData.filter((row) =>
+    Object.values(row)
+      .join(" ")
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase())
+  );
 
-    const handleFilter = () => {
-        if (startDate && endDate) {
-            const filtered = tableData.filter((row) => {
-                const assignedDate = new Date(row.assignedDate);
-                const endDate1 = new Date(row.endDate);
-                return assignedDate >= startDate && endDate1 <= endDate;
-            });
-            setFilteredData(filtered);
-            setCurrentPage(0); // Reset to first page after filtering
-        } else {
-            setFilteredData(tableData);
-        }
-    };
+  // Calculate total pages
+  const pages = Math.ceil(filteredData.length / rowsPerPage);
 
-    const handleNextPage = () => {
-        setCurrentPage((prev) => Math.min(prev + 1, pages - 1));
-    };
+  const handlePrevPage = () => {
+    if (currentPage > 0) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
 
-    const handlePrevPage = () => {
-        setCurrentPage((prev) => Math.max(prev - 1, 0));
-    };
+  const handleNextPage = () => {
+    if (currentPage < pages - 1) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
 
-    const handleRowCheckboxChange = (caseId) => {
-        if (selectedRows.includes(caseId)) {
-            setSelectedRows(selectedRows.filter((id) => id !== caseId));
-        } else {
-            setSelectedRows([...selectedRows, caseId]);
-        }
-    };
+  const startIndex = currentPage * rowsPerPage;
+  const endIndex = startIndex + rowsPerPage;
+  const paginatedData = filteredData.slice(startIndex, endIndex);
 
-    const handleSelectAllDataChange = (e) => {
-        setSelectAllData(e.target.checked);
-        if (e.target.checked) {
-            setSelectedRows(filteredData.map(row => row.id));
-        } else {
-            setSelectedRows([]);
-        }
-    };
+  const handleRowCheckboxChange = (id) => {
+    if (selectedRows.includes(id)) {
+      setSelectedRows(selectedRows.filter((rowId) => rowId !== id));
+    } else {
+      setSelectedRows([...selectedRows, id]);
+    }
+  };
 
-    return (
-        <div className={`p-4 ${GlobalStyle.fontPoppins}`}>
-            <div className="flex justify-between items-center w-full">
-                <h1 className={`${GlobalStyle.headingLarge} m-0`}>Direct LOD sending Incidents</h1>
-                <Link
-                    className={`${GlobalStyle.buttonPrimary}`}
-                    to="/lod/ftllod/ftllod/downloadcreateftllod"
+  const handleSelectAllDataChange = () => {
+    if (selectAllData) {
+      setSelectedRows([]); // Clear all selections
+    } else {
+      setSelectedRows(filteredData.map((row) => row.id)); // Select all visible rows
+    }
+    setSelectAllData(!selectAllData);
+  };
+
+  return (
+    <div className={GlobalStyle.fontPoppins}>
+      <div className="flex justify-between items-center w-full gap-4">
+        <h1 className={`${GlobalStyle.headingLarge} m-0 pr-4`}>
+          Incidents Ready for Distribute to Collect Only CPE
+        </h1>
+        <Link
+          className={`${GlobalStyle.buttonPrimary}pr-4 `}
+          to="/lod/ftllod/ftllod/downloadcreateftllod"
+        >
+          Create task and let me know
+        </Link>
+      </div>
+
+      {/* Filter Section */}
+      <div className="flex justify-end gap-10 my-12 items-center">
+        {/* Source Dropdown */}
+        <div className="flex items-center gap-4">
+          <label>Source:</label>
+          <select
+            className={GlobalStyle.inputText}
+            value={selectedSource}
+            onChange={(e) => setSelectedSource(e.target.value)}
+          >
+            <option value="">Select</option>
+            <option value="Pilot - Suspended">Pilot - Suspended</option>
+            <option value="Special">Special</option>
+            <option value="Product Terminate">Product Terminate</option>
+          </select>
+        </div>
+
+        {/* Date Picker Section */}
+        <div className="flex items-center gap-4">
+          <label>Date:</label>
+          <DatePicker
+            selected={fromDate}
+            onChange={handleFromDateChange}
+            dateFormat="dd/MM/yyyy"
+            placeholderText="dd/MM/yyyy"
+            className={GlobalStyle.inputText}
+          />
+          <DatePicker
+            selected={toDate}
+            onChange={handleToDateChange}
+            dateFormat="dd/MM/yyyy"
+            placeholderText="dd/MM/yyyy"
+            className={GlobalStyle.inputText}
+          />
+          {error && <span className={GlobalStyle.errorText}>{error}</span>}
+        </div>
+
+        {/* Filter Button */}
+        <button
+          className={`${GlobalStyle.buttonPrimary} h-[35px]`}
+          onClick={() => {}}
+        >
+          Filter
+        </button>
+      </div>
+
+      {/* Table Section */}
+      <div className="flex flex-col">
+        {/* Search Bar Section */}
+        <div className="mb-4 flex justify-start">
+          <div className={GlobalStyle.searchBarContainer}>
+            <input
+              type="text"
+              placeholder=""
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className={GlobalStyle.inputSearch}
+            />
+            <FaSearch className={GlobalStyle.searchBarIcon} />
+          </div>
+        </div>
+        <div className={GlobalStyle.tableContainer}>
+          <table className={GlobalStyle.table}>
+            <thead className={GlobalStyle.thead}>
+              <tr>
+                <th scope="col" className={GlobalStyle.tableHeader}></th>
+                <th scope="col" className={GlobalStyle.tableHeader}>
+                  ID
+                </th>
+                <th scope="col" className={GlobalStyle.tableHeader}>
+                  Status
+                </th>
+                <th scope="col" className={GlobalStyle.tableHeader}>
+                  Account No.
+                </th>
+                <th scope="col" className={GlobalStyle.tableHeader}>
+                  Action
+                </th>
+                <th scope="col" className={GlobalStyle.tableHeader}></th>
+              </tr>
+            </thead>
+            <tbody>
+              {paginatedData.map((row, index) => (
+                <tr
+                  key={index}
+                  className={`${
+                    index % 2 === 0
+                      ? "bg-white bg-opacity-75"
+                      : "bg-gray-50 bg-opacity-50"
+                  } border-b`}
                 >
-                    Create task and let me know
-                </Link>
-            </div>
-
-            {/* Filter Section */}
-            <div className="flex justify-end gap-10 my-12">
-                <div className="flex items-center gap-4">
-                    <label>Source:</label>
-                    <select 
-                        className={GlobalStyle.inputText}
-                        value={selectedSource}
-                        onChange={(e) => setSelectedSource(e.target.value)}
+                  <td className={GlobalStyle.tableData}>
+                    <input
+                      type="checkbox"
+                      className={"rounded-lg"}
+                      checked={selectedRows.includes(row.id)}
+                      onChange={() => handleRowCheckboxChange(row.id)}
+                    />
+                  </td>
+                  <td className={GlobalStyle.tableData}>
+                    <a href={`#${row.id}`} className="hover:underline">
+                      {row.id}
+                    </a>
+                  </td>
+                  <td className={GlobalStyle.tableData}>{row.status}</td>
+                  <td className={GlobalStyle.tableData}>{row.account_no}</td>
+                  <td className={GlobalStyle.tableData}>
+                    {new Intl.NumberFormat("en-US").format(row.action)}
+                  </td>
+                  <td
+                    className={`${GlobalStyle.tableData} text-center px-6 py-4`}
+                  >
+                    <button
+                      className={`${GlobalStyle.buttonPrimary} mx-auto`}
+                      onClick={""}
                     >
-                        <option value="">Select</option>
-                        <option value="Pilot - Suspended">Pilot - Suspended</option>
-                        <option value="Special">Special</option>
-                        <option value="Product Terminate">Product Terminate</option>
-                    </select>
-                    
-                    <div className={GlobalStyle.datePickerContainer}>
-                        <label className={GlobalStyle.dataPickerDate}>Date - From:</label>
-                        <DatePicker
-                            selected={startDate}
-                            onChange={(date) => setStartDate(date)}
-                            dateFormat="dd/MM/yyyy"
-                            placeholderText="To:"
-                            className={GlobalStyle.inputText}
-                        />
-                    </div>
-                </div>
-                <button
-                    className={`${GlobalStyle.buttonPrimary} h-[35px]`}
-                    onClick={handleFilter}
-                >
-                    Filter
-                </button>
-            </div>
+                      Proceed
+                    </button>
+                  </td>
+                </tr>
+              ))}
+              {paginatedData.length === 0 && (
+                <tr>
+                  <td colSpan="6" className="text-center py-4">
+                    No results found
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
 
-            {/* Table Section */}
-            <div className={GlobalStyle.tableContainer}>
-                <table className={GlobalStyle.table}>
-                    <thead className={GlobalStyle.thead}>
-                        <tr>
-                            <th className={GlobalStyle.tableHeader}>
-                                <input 
-                                    type="checkbox" 
-                                    className="rounded-lg"
-                                    checked={selectAllData}
-                                    onChange={handleSelectAllDataChange}
-                                />
-                            </th>
-                            <th className={GlobalStyle.tableHeader}>ID</th>
-                            <th className={GlobalStyle.tableHeader}>Status</th>
-                            <th className={GlobalStyle.tableHeader}>Account No.</th>
-                            <th className={GlobalStyle.tableHeader}>Action</th>
-                            <th className={GlobalStyle.tableHeader}></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {paginatedData.map((row, index) => (
-                            <tr
-                                key={index}
-                                className={`${
-                                    index % 2 === 0
-                                        ? "bg-white bg-opacity-75"
-                                        : "bg-gray-50 bg-opacity-50"
-                                } border-b`}
-                            >
-                                <td className={GlobalStyle.tableData}>
-                                    <input
-                                        type="checkbox"
-                                        className="rounded-lg"
-                                        checked={selectedRows.includes(row.id)}
-                                        onChange={() => handleRowCheckboxChange(row.id)}
-                                    />
-                                </td>
-                                <td className={GlobalStyle.tableData}>
-                                    <a href={`#${row.id}`} className="hover:underline">
-                                        {row.id}
-                                    </a>
-                                </td>
-                                <td className={GlobalStyle.tableData}>{row.status}</td>
-                                <td className={GlobalStyle.tableData}>{row.account_no}</td>
-                                <td className={GlobalStyle.tableData}>{row.action}</td>
-                                <td className={`${GlobalStyle.tableData} text-center px-6 py-4`}>
-                                    <button className={`${GlobalStyle.buttonPrimary} mx-auto`}>
-                                        Proceed
-                                    </button>
-                                </td>
-                            </tr>
-                        ))}
-                        {paginatedData.length === 0 && (
-                            <tr>
-                                <td colSpan="7" className="text-center py-4">
-                                    No results found
-                                </td>
-                            </tr>
-                        )}
-                    </tbody>
-                </table>
-            </div>
+      {/* Navigation Buttons */}
+      {filteredData.length > rowsPerPage && (
+        <div className={GlobalStyle.navButtonContainer}>
+          <button
+            className={GlobalStyle.navButton}
+            onClick={handlePrevPage}
+            disabled={currentPage === 0}
+          >
+            <FaArrowLeft />
+          </button>
+          <span>
+            Page {currentPage + 1} of {pages}
+          </span>
+          <button
+            className={GlobalStyle.navButton}
+            onClick={handleNextPage}
+            disabled={currentPage === pages - 1}
+          >
+            <FaArrowRight />
+          </button>
+        </div>
+      )}
 
+      <div className="flex justify-end items-center w-full mt-6">
+        {/* Select All Data Checkbox */}
+        <label className="flex items-center gap-2">
+          <input
+            type="checkbox"
+            className="rounded-lg"
+            checked={
+              selectAllData ||
+              filteredData.every((row) => selectedRows.includes(row.id))
+            } // Reflect selection state
+            onChange={handleSelectAllDataChange}
+          />
+          Select All Data
+        </label>
 
-                <div className="flex items-center p-4">
-                    <Link
-                        className={`${GlobalStyle.buttonPrimary} ml-4`}
-                        to="/lod/ftllod/ftllod/downloadcreateftllod"
-                    >
-                        Create
-                    </Link>
-                </div>
-            </div>
-        
-    );
+        <Link
+          className={`${GlobalStyle.buttonPrimary} ml-4`}
+          to="/lod/ftllod/ftllod/downloadcreateftllod"
+        >
+          Proceed
+        </Link>
+      </div>
+    </div>
+  );
 }
