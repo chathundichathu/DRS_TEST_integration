@@ -3,6 +3,8 @@ import DatePicker from "react-datepicker";
 import { FaArrowLeft, FaArrowRight, FaSearch } from "react-icons/fa";
 import { useNavigate, Link } from "react-router-dom";
 import GlobalStyle from "../../assets/prototype/GlobalStyle.jsx";
+import 'react-datepicker/dist/react-datepicker.css';
+import Incident_Reject from "../../assets/images/Incident_Reject.png"
 
 export default function RejectIncidentlog() {
   const navigate = useNavigate();
