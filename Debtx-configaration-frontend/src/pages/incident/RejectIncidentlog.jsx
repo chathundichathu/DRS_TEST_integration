@@ -1,211 +1,311 @@
-
-import React, { useState } from 'react';
-import { FaDownload, FaArrowLeft, FaArrowRight } from 'react-icons/fa'; // Importing icons
-import { useNavigate } from 'react-router-dom'; // Importing useNavigate from react-router-dom for navigation
-import DatePicker from 'react-datepicker';
+import React, { useState } from "react";
+import DatePicker from "react-datepicker";
+import { FaArrowLeft, FaArrowRight, FaSearch } from "react-icons/fa";
+import { useNavigate, Link } from "react-router-dom";
 import GlobalStyle from "../../assets/prototype/GlobalStyle.jsx";
-import 'react-datepicker/dist/react-datepicker.css';
 
-const RejectIncidentlog = () => {
-  const [source, setSource] = useState('');
-  const [fromDate, setFromDate] = useState(null);
-  const [toDate, setToDate] = useState(null); 
-  const [error, setError] = useState("");
-  const [selectedIncidents, setSelectedIncidents] = useState([]);
-  const [incidentStatus, setIncidentStatus] = useState('Rejected'); // Default to "Rejected" status
+export default function RejectIncidentlog() {
+  const navigate = useNavigate();
 
-  const incidents = [
-    { id: 'RC001', accountNo: '0115678', reason: 'Credit Class = VIP', date: '01-Jan-2024', status: 'Rejected' },
-    { id: 'RC002', accountNo: '8765946', reason: 'Customer Type = SLT', date: '15-Jan-2024', status: 'Rejected' },
-    { id: 'RC003', accountNo: '3754918', reason: 'Customer Segment = 2467', date: '05-Feb-2024', status: 'Rejected' },
+  // Table data exactly matching the image
+  const tableData = [
+    {
+      id: "RC001",
+      status: "Direct LOD",
+      account_no: "0115678",
+      filtered_reason: "credit class",
+      reject_owned: "9/10/2024",
+      reject_by: "7634",
+    },
+    {
+      id: "RC002",
+      status: "Direct LOD",
+      account_no: "0115678",
+      filtered_reason: "customer type",
+      reject_owned: "9/10/2024",
+      reject_by: "3476",
+    },
+    {
+      id: "RC003",
+      status: "Direct LOD",
+      account_no: "0115678",
+      filtered_reason: "credit class",
+      reject_owned: "9/10/2024",
+      reject_by: "7634",
+    },
   ];
 
-  const navigate = useNavigate(); // Initialize useNavigate hook
+  // Filter state
+  const [fromDate, setFromDate] = useState(null); //for date
+  const [toDate, setToDate] = useState(null);
+  const [error, setError] = useState("");
+  const [selectAllData, setSelectAllData] = useState(false);
+  const [selectedRows, setSelectedRows] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(0); // Changed to 0-based indexing
+  const [selectedSource, setSelectedSource] = useState("");
 
-  const handleReject = (id) => {
-    alert(`Reject clicked for ID: ${id}`);
+  const rowsPerPage = 7; // Number of rows per page
+
+  // validation for date
+  const handleFromDateChange = (date) => {
+    if (toDate && date > toDate) {
+      setError("The 'From' date cannot be later than the 'To' date.");
+    } else {
+      setError("");
+      setFromDate(date);
+    }
   };
 
-  const handleRejectAll = () => {
-    alert('Reject All clicked');
+  // validation for date
+  const handleToDateChange = (date) => {
+    if (fromDate && date < fromDate) {
+      setError("The 'To' date cannot be earlier than the 'From' date.");
+    } else {
+      setError("");
+      setToDate(date);
+    }
   };
 
-  const handleMoveForward = () => {
-    alert('Move Forward clicked');
+  //search fuction
+  const filteredData = tableData.filter((row) =>
+    Object.values(row)
+      .join(" ")
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase())
+  );
+
+  // Calculate total pages
+  const pages = Math.ceil(filteredData.length / rowsPerPage);
+
+  const handlePrevPage = () => {
+    if (currentPage > 0) {
+      setCurrentPage(currentPage - 1);
+    }
   };
 
-  const handleCheckboxChange = (id) => {
-    setSelectedIncidents((prevSelected) =>
-      prevSelected.includes(id)
-        ? prevSelected.filter(item => item !== id)
-        : [...prevSelected, id]
-    );
+  const handleNextPage = () => {
+    if (currentPage < pages - 1) {
+      setCurrentPage(currentPage + 1);
+    }
   };
 
-  const filteredIncidents = incidents.filter((incident) => {
-    return incident.status === incidentStatus;
-  });
+  const startIndex = currentPage * rowsPerPage;
+  const endIndex = startIndex + rowsPerPage;
+  const paginatedData = filteredData.slice(startIndex, endIndex);
 
- // validation for date
- const handleFromDateChange = (date) => {
-  if (toDate && date > toDate) {
-    setError("The 'From' date cannot be later than the 'To' date.");
-  } else {
-    setError("");
-    setFromDate(date);
-  }
-};
+  const handleRowCheckboxChange = (id) => {
+    if (selectedRows.includes(id)) {
+      setSelectedRows(selectedRows.filter((rowId) => rowId !== id));
+    } else {
+      setSelectedRows([...selectedRows, id]);
+    }
+  };
 
-// validation for date
-const handleToDateChange = (date) => {
-  if (fromDate && date < fromDate) {
-    setError("The 'To' date cannot be earlier than the 'From' date.");
-  } else {
-    setError("");
-    setToDate(date);
-  }
-};
-
-//   const handleDirectLOD = () => {
-//     navigate('/incident/log/directlod'); // Navigate to Direct LOD page
-//   };
-
-  
-  
+  const handleSelectAllDataChange = () => {
+    if (selectAllData) {
+      setSelectedRows([]); // Clear all selections
+    } else {
+      setSelectedRows(filteredData.map((row) => row.id)); // Select all visible rows
+    }
+    setSelectAllData(!selectAllData);
+  };
 
   return (
-    <div className="p-6 min-h-screen opacity-80 font-poppins">
-        <h2 className={`${GlobalStyle.headingLarge} mb-5`}>Rejected Incident Details</h2>
-
-        {/* Open Incidents and Reject Incidents Buttons
-        <div className="flex mb-5">
-          <button
-            className="bg-blue-50 text-black px-8 py-3 rounded-tl-lg rounded-tr-lg shadow hover:bg-[#1a3b55] hover:text-white"
-            onClick={handleOpenIncidents} // Trigger navigation to incident details page
-          >
-            Open Incidents
-          </button>
-          <button
-            className="bg-blue-50 text-black font-bold px-8 py-3 rounded-tl-lg rounded-tr-lg shadow hover:bg-[#1a3b55] hover:text-white"
-            onClick={() => setIncidentStatus('Rejected')}
-          >
-            Reject Incidents
-          </button>
-
-          <button
-            className="bg-blue-50 text-black px-8 py-3 rounded-tl-lg rounded-tr-lg shadow hover:bg-[#1a3b55] hover:text-white"
-            onClick={handleDirectLOD} // Trigger navigation to Direct LOD
-          >
-            Direct LOD
-          </button> */}
-        {/* </div> */}
-
-        {/* Filter Section */}
-        <div className="mb-6">
-          <div className="flex flex-wrap items-center gap-6 mb-0">
-            <div className="flex items-center gap-2">
-              <label className="text-lg font-bold text-black">Source:</label>
-              <select
-                className={GlobalStyle.selectBox}
-                value={source}
-                onChange={(e) => setSource(e.target.value)}
-              >
-                <option value="">Select</option>
-                <option value="source1">Source 1</option>
-                <option value="source2">Source 2</option>
-              </select>
-            </div>
-
-            <div className="flex flex-col mb-4">
-        <div className={GlobalStyle.datePickerContainer}>
-          <label className={GlobalStyle.dataPickerDate}>Date </label>
-          <DatePicker
-            selected={fromDate}
-            onChange={handleFromDateChange}
-            dateFormat="dd/MM/yyyy"
-            placeholderText="dd/MM/yyyy"
-            className={GlobalStyle.inputText}
-          />
-          <DatePicker
-            selected={toDate}
-            onChange={handleToDateChange}
-            dateFormat="dd/MM/yyyy"
-            placeholderText="dd/MM/yyyy"
-            className={GlobalStyle.inputText}
-          />
-        </div>
-        {error && <span className={GlobalStyle.errorText}>{error}</span>}
+    <div className={GlobalStyle.fontPoppins}>
+      <div className="flex justify-between items-center w-full">
+        <h1 className={`${GlobalStyle.headingLarge} m-0`}>
+          Rejected Incident Log
+        </h1>
       </div>
-              
 
-            <button
-             className={GlobalStyle.buttonPrimary}
-              onClick={handleRejectAll}
-            >
-              Filter
-            </button>
+      {/* Filter Section */}
+      <div className="flex flex-wrap gap-4 my-5 items-center justify-end">
+        {/* Row 1: Source Dropdowns */}
+        <div className="flex items-center gap-4 w-full justify-end">
+          <select
+            className={`${GlobalStyle.inputText} dropdownSmall`}
+            value={selectedSource}
+            onChange={(e) => setSelectedSource(e.target.value)}
+          >
+            <option value="">Action Type</option>
+            <option value="Pilot - Suspended">Pilot - Suspended</option>
+            <option value="Special">Special</option>
+            <option value="Product Terminate">Product Terminate</option>
+          </select>
+
+          <select
+            className={`${GlobalStyle.inputText} dropdownSmall`}
+            value={selectedSource}
+            onChange={(e) => setSelectedSource(e.target.value)}
+          >
+            <option value="">Status</option>
+            <option value="Pilot - Suspended">Pilot - Suspended</option>
+            <option value="Special">Special</option>
+            <option value="Product Terminate">Product Terminate</option>
+          </select>
+        </div>
+
+        {/* Row 2: Date Picker and Filter Button */}
+        <div className="flex items-center gap-4 w-full justify-end">
+          <div className="flex items-center gap-1">
+            <label className="whitespace-nowrap">Date:</label>
+            <DatePicker
+              selected={fromDate}
+              onChange={handleFromDateChange}
+              dateFormat="dd/MM/yyyy"
+              placeholderText="dd/MM/yyyy"
+              className={GlobalStyle.inputText}
+            />
+            <DatePicker
+              selected={toDate}
+              onChange={handleToDateChange}
+              dateFormat="dd/MM/yyyy"
+              placeholderText="dd/MM/yyyy"
+              className={GlobalStyle.inputText}
+            />
+            {error && <span className={GlobalStyle.errorText}>{error}</span>}
+          </div>
+
+          <button
+            className={`${GlobalStyle.buttonPrimary} h-[35px]`}
+            onClick={() => {}}
+          >
+            Filter
+          </button>
+        </div>
+      </div>
+
+      {/* Table Section */}
+      <div className="flex flex-col">
+        {/* Search Bar Section */}
+        <div className="mb-4 flex justify-start">
+          <div className={GlobalStyle.searchBarContainer}>
+            <input
+              type="text"
+              placeholder=""
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className={GlobalStyle.inputSearch}
+            />
+            <FaSearch className={GlobalStyle.searchBarIcon} />
           </div>
         </div>
-
         <div className={GlobalStyle.tableContainer}>
-        <table className={GlobalStyle.table}>
-        <thead className={GlobalStyle.thead}>
-            <tr>
-              <th scope="col" className={GlobalStyle.tableHeader}>Select</th>
-              <th scope="col" className={GlobalStyle.tableHeader}>ID</th>
-              <th scope="col" className={GlobalStyle.tableHeader}>Account No.</th>
-              <th scope="col" className={GlobalStyle.tableHeader}>Reason</th>
-              <th scope="col" className={GlobalStyle.tableHeader}>Rejected On</th>
-              <th scope="col" className={GlobalStyle.tableHeader}>Status</th>
-              <th scope="col" className={GlobalStyle.tableHeader}>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredIncidents.map((incident, index) => (
-              <tr
-                key={index}
-                className={`${index % 2 === 0 ? GlobalStyle.tableRowEven : GlobalStyle.tableRowOdd} border-b`}
-              >
-                <td className={GlobalStyle.tableData}>
-                  <input
-                    type="checkbox"
-                    checked={selectedIncidents.includes(incident.id)}
-                    onChange={() => handleCheckboxChange(incident.id)}
-                    className="form-checkbox w-6 h-6"
-                  />
-                </td>
-                <td className={`${GlobalStyle.tableData} text-blue-600 hover:underline cursor-pointer `} >{incident.id}</td>
-                <td className={GlobalStyle.tableData}>{incident.accountNo}</td>
-                <td className={GlobalStyle.tableData}>{incident.reason}</td>
-                <td className={GlobalStyle.tableData}>{incident.date}</td>
-                <td className={GlobalStyle.tableData}>{incident.status}</td>
-                <td className={GlobalStyle.tableData}>
-                  <button
-                    className={GlobalStyle.buttonPrimary}
-                    onClick={() => handleReject(incident.id)}
-                  >
-                    Reject
-                  </button>
-                </td>
+          <table className={GlobalStyle.table}>
+            <thead className={GlobalStyle.thead}>
+              <tr>
+                <th scope="col" className={GlobalStyle.tableHeader}></th>
+                <th scope="col" className={GlobalStyle.tableHeader}>
+                  ID
+                </th>
+                <th scope="col" className={GlobalStyle.tableHeader}>
+                  Status
+                </th>
+                <th scope="col" className={GlobalStyle.tableHeader}>
+                  Account No.
+                </th>
+                <th scope="col" className={GlobalStyle.tableHeader}>
+                  Filtered Reason
+                </th>
+                <th scope="col" className={GlobalStyle.tableHeader}>
+                  Reject Owned
+                </th>
+                <th scope="col" className={GlobalStyle.tableHeader}>
+                  Reject By
+                </th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-        </div>
+            </thead>
+            <tbody>
+              {paginatedData.map((row, index) => (
+                <tr
+                  key={index}
+                  className={`${
+                    index % 2 === 0
+                      ? "bg-white bg-opacity-75"
+                      : "bg-gray-50 bg-opacity-50"
+                  } border-b`}
+                >
+                  <td className={GlobalStyle.tableData}>
+                    <input
+                      type="checkbox"
+                      className={"rounded-lg"}
+                      checked={selectedRows.includes(row.id)}
+                      onChange={() => handleRowCheckboxChange(row.id)}
+                    />
+                  </td>
+                  <td className={GlobalStyle.tableData}>
+                    <a href={`#${row.id}`} className="hover:underline">
+                      {row.id}
+                    </a>
+                  </td>
+                  <td className={GlobalStyle.tableData}>{row.status}</td>
+                  <td className={GlobalStyle.tableData}>{row.account_no}</td>
+                  <td className={GlobalStyle.tableData}>
+                    {row.filtered_reason}
+                  </td>
 
-        {/* Download, Reject All, Move Forward Buttons */}
-        <div className="mt-8 flex justify-end items-center gap-6">
-          
-          <button
-            className={GlobalStyle.buttonPrimary}
-            onClick={() => window.location.href = ''}
-          >
-            Create task and let me know
-          </button>
-          
+                  <td className={GlobalStyle.tableData}>{row.reject_owned}</td>
+                  <td className={GlobalStyle.tableData}>{row.reject_by}</td>
+                </tr>
+              ))}
+              {paginatedData.length === 0 && (
+                <tr>
+                  <td colSpan="6" className="text-center py-4">
+                    No results found
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </div>
       </div>
-  );
-};
 
-export default RejectIncidentlog;
+      {/* Navigation Buttons */}
+      {filteredData.length > rowsPerPage && (
+        <div className={GlobalStyle.navButtonContainer}>
+          <button
+            className={GlobalStyle.navButton}
+            onClick={handlePrevPage}
+            disabled={currentPage === 0}
+          >
+            <FaArrowLeft />
+          </button>
+          <span>
+            Page {currentPage + 1} of {pages}
+          </span>
+          <button
+            className={GlobalStyle.navButton}
+            onClick={handleNextPage}
+            disabled={currentPage === pages - 1}
+          >
+            <FaArrowRight />
+          </button>
+        </div>
+      )}
+
+      <div className="flex justify-end items-center w-full mt-6">
+        {/* Select All Data Checkbox */}
+        <label className="flex items-center gap-2">
+          <input
+            type="checkbox"
+            className="rounded-lg"
+            checked={
+              selectAllData ||
+              filteredData.every((row) => selectedRows.includes(row.id))
+            } // Reflect selection state
+            onChange={handleSelectAllDataChange}
+          />
+          Select All Data
+        </label>
+
+        <Link
+          className={`${GlobalStyle.buttonPrimary} ml-4`}
+          to="/lod/ftllod/ftllod/downloadcreateftllod"
+        >
+          Create Task Let Me Know
+        </Link>
+      </div>
+    </div>
+  );
+}
