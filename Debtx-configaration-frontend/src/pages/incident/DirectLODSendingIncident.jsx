@@ -29,13 +29,14 @@ export default function DirectLODSendingIncident() {
             account_no: "3754918",
             amount: "900",
             source_type: "Product Terminate"
-        }
+        },
+        
     ];
 
     // Filter state
-    const [startDate, setStartDate] = useState(null);
-    const [endDate, setEndDate] = useState(null);
-    const [filteredData, setFilteredData] = useState(tableData);
+    const [fromDate, setFromDate] = useState(null); //for date
+    const [toDate, setToDate] = useState(null);
+    const [error, setError] = useState("");
     const [selectAllData, setSelectAllData] = useState(false);
     const [selectedRows, setSelectedRows] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
@@ -44,64 +45,76 @@ export default function DirectLODSendingIncident() {
 
     const rowsPerPage = 7; // Number of rows per page
 
-    // Filter data based on search query
-    const filteredSearchData = filteredData.filter((row) =>
+    // validation for date
+  const handleFromDateChange = (date) => {
+    if (toDate && date > toDate) {
+      setError("The 'From' date cannot be later than the 'To' date.");
+    } else {
+      setError("");
+      setFromDate(date);
+    }
+  };
+
+  // validation for date
+  const handleToDateChange = (date) => {
+    if (fromDate && date < fromDate) {
+      setError("The 'To' date cannot be earlier than the 'From' date.");
+    } else {
+      setError("");
+      setToDate(date);
+    }
+  };
+
+
+    //search fuction
+    const filteredData = tableData.filter((row) =>
         Object.values(row)
-            .join(" ")
-            .toLowerCase()
-            .includes(searchQuery.toLowerCase())
-    );
+          .join(" ")
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase())
+      );
+      
+
 
     // Calculate total pages
-    const pages = Math.ceil(filteredSearchData.length / rowsPerPage);
-
-    // Get paginated data
-    const paginatedData = filteredSearchData.slice(
-        currentPage * rowsPerPage,
-        (currentPage + 1) * rowsPerPage
-    );
-
-    const handleFilter = () => {
-        if (startDate && endDate) {
-            const filtered = tableData.filter((row) => {
-                const assignedDate = new Date(row.assignedDate);
-                const endDate1 = new Date(row.endDate);
-                return assignedDate >= startDate && endDate1 <= endDate;
-            });
-            setFilteredData(filtered);
-            setCurrentPage(0); // Reset to first page after filtering
-        } else {
-            setFilteredData(tableData);
-        }
-    };
-
-    const handleNextPage = () => {
-        setCurrentPage((prev) => Math.min(prev + 1, pages - 1));
-    };
+    const pages = Math.ceil(filteredData.length / rowsPerPage);
 
     const handlePrevPage = () => {
-        setCurrentPage((prev) => Math.max(prev - 1, 0));
-    };
-
-    const handleRowCheckboxChange = (caseId) => {
-        if (selectedRows.includes(caseId)) {
-            setSelectedRows(selectedRows.filter((id) => id !== caseId));
-        } else {
-            setSelectedRows([...selectedRows, caseId]);
+        if (currentPage > 0) {
+          setCurrentPage(currentPage - 1);
         }
-    };
-
-    const handleSelectAllDataChange = (e) => {
-        setSelectAllData(e.target.checked);
-        if (e.target.checked) {
-            setSelectedRows(filteredData.map(row => row.id));
-        } else {
-            setSelectedRows([]);
+      };
+    
+      const handleNextPage = () => {
+        if (currentPage < pages - 1) {
+          setCurrentPage(currentPage + 1);
         }
-    };
+      };
+
+      const startIndex = currentPage * rowsPerPage;
+      const endIndex = startIndex + rowsPerPage;
+      const paginatedData = filteredData.slice(startIndex, endIndex);
+
+    const handleRowCheckboxChange = (id) => {
+        if (selectedRows.includes(id)) {
+          setSelectedRows(selectedRows.filter((rowId) => rowId !== id));
+        } else {
+          setSelectedRows([...selectedRows, id]);
+        }
+      };
+
+      const handleSelectAllDataChange = () => {
+        if (selectAllData) {
+          setSelectedRows([]); // Clear all selections
+        } else {
+          setSelectedRows(filteredData.map((row) => row.id)); // Select all visible rows
+        }
+        setSelectAllData(!selectAllData);
+      };
+      
 
     return (
-        <div className={`p-4 ${GlobalStyle.fontPoppins}`}>
+        <div className={GlobalStyle.fontPoppins}>
             <div className="flex justify-between items-center w-full">
                 <h1 className={`${GlobalStyle.headingLarge} m-0`}>Direct LOD sending Incidents</h1>
                 <Link
@@ -113,58 +126,78 @@ export default function DirectLODSendingIncident() {
             </div>
 
             {/* Filter Section */}
-            <div className="flex justify-end gap-10 my-12">
-                <div className="flex items-center gap-4">
-                    <label>Source:</label>
-                    <select 
-                        className={GlobalStyle.inputText}
-                        value={selectedSource}
-                        onChange={(e) => setSelectedSource(e.target.value)}
-                    >
-                        <option value="">Select</option>
-                        <option value="Pilot - Suspended">Pilot - Suspended</option>
-                        <option value="Special">Special</option>
-                        <option value="Product Terminate">Product Terminate</option>
-                    </select>
-                    
-                    <div className={GlobalStyle.datePickerContainer}>
-                        <label className={GlobalStyle.dataPickerDate}>Date - From:</label>
-                        <DatePicker
-                            selected={startDate}
-                            onChange={(date) => setStartDate(date)}
-                            dateFormat="dd/MM/yyyy"
-                            placeholderText="To:"
-                            className={GlobalStyle.inputText}
-                        />
-                    </div>
-                </div>
-                <button
-                    className={`${GlobalStyle.buttonPrimary} h-[35px]`}
-                    onClick={handleFilter}
-                >
-                    Filter
-                </button>
-            </div>
+            <div className="flex justify-end gap-10 my-12 items-center">
+  {/* Source Dropdown */}
+  <div className="flex items-center gap-4">
+    <label>Source:</label>
+    <select 
+      className={GlobalStyle.inputText}
+      value={selectedSource}
+      onChange={(e) => setSelectedSource(e.target.value)}
+    >
+      <option value="">Select</option>
+      <option value="Pilot - Suspended">Pilot - Suspended</option>
+      <option value="Special">Special</option>
+      <option value="Product Terminate">Product Terminate</option>
+    </select>
+  </div>
+
+  {/* Date Picker Section */}
+  <div className="flex items-center gap-4">
+    <label>Date:</label>
+    <DatePicker
+      selected={fromDate}
+      onChange={handleFromDateChange}
+      dateFormat="dd/MM/yyyy"
+      placeholderText="dd/MM/yyyy"
+      className={GlobalStyle.inputText}
+    />
+    <DatePicker
+      selected={toDate}
+      onChange={handleToDateChange}
+      dateFormat="dd/MM/yyyy"
+      placeholderText="dd/MM/yyyy"
+      className={GlobalStyle.inputText}
+    />
+    {error && <span className={GlobalStyle.errorText}>{error}</span>}
+  </div>
+
+  {/* Filter Button */}
+  <button
+    className={`${GlobalStyle.buttonPrimary} h-[35px]`}
+    onClick={() => {}}
+  >
+    Filter
+  </button>
+</div>
+
 
             {/* Table Section */}
+            <div className="flex flex-col">
+                {/* Search Bar Section */}
+        <div className="mb-4 flex justify-start">
+          <div className={GlobalStyle.searchBarContainer}>
+            <input
+              type="text"
+              placeholder=""
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className={GlobalStyle.inputSearch}
+            />
+            <FaSearch className={GlobalStyle.searchBarIcon} />
+          </div>
+        </div>
             <div className={GlobalStyle.tableContainer}>
                 <table className={GlobalStyle.table}>
                     <thead className={GlobalStyle.thead}>
                         <tr>
-                            <th className={GlobalStyle.tableHeader}>
-                                <input 
-                                    type="checkbox" 
-                                    className="rounded-lg"
-                                    checked={selectAllData}
-                                    onChange={handleSelectAllDataChange}
-                                />
-                            </th>
-                            <th className={GlobalStyle.tableHeader}>ID</th>
-                            <th className={GlobalStyle.tableHeader}>Status</th>
-                            <th className={GlobalStyle.tableHeader}>Account No.</th>
-                            <th className={GlobalStyle.tableHeader}>Amount</th>
-                            <th className={GlobalStyle.tableHeader}>Source Type</th>
-                            <th className={GlobalStyle.tableHeader}></th>
+                            <th scope="col" className={GlobalStyle.tableHeader}></th>
+                            <th scope='col' className={GlobalStyle.tableHeader}>ID</th>
+                            <th scope='col' className={GlobalStyle.tableHeader}>Status</th>
+                            <th scope='col' className={GlobalStyle.tableHeader}>Account No.</th>
+                            <th scope='col' className={GlobalStyle.tableHeader}>Amount</th>
+                            <th scope='col' className={GlobalStyle.tableHeader}>Source Type</th>
+                            <th scope='col' className={GlobalStyle.tableHeader}></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -178,12 +211,12 @@ export default function DirectLODSendingIncident() {
                                 } border-b`}
                             >
                                 <td className={GlobalStyle.tableData}>
-                                    <input
-                                        type="checkbox"
-                                        className="rounded-lg"
-                                        checked={selectedRows.includes(row.id)}
-                                        onChange={() => handleRowCheckboxChange(row.id)}
-                                    />
+                                <input
+                      type="checkbox"
+                      className={"rounded-lg"}
+                      checked={selectedRows.includes(row.id)}
+                      onChange={() => handleRowCheckboxChange(row.id)}
+                    />
                                 </td>
                                 <td className={GlobalStyle.tableData}>
                                     <a href={`#${row.id}`} className="hover:underline">
@@ -192,18 +225,24 @@ export default function DirectLODSendingIncident() {
                                 </td>
                                 <td className={GlobalStyle.tableData}>{row.status}</td>
                                 <td className={GlobalStyle.tableData}>{row.account_no}</td>
-                                <td className={GlobalStyle.tableData}>{row.amount}</td>
+                                <td className={GlobalStyle.tableData}>
+  {new Intl.NumberFormat('en-US').format(row.amount)}
+</td>
+
                                 <td className={GlobalStyle.tableData}>{row.source_type}</td>
                                 <td className={`${GlobalStyle.tableData} text-center px-6 py-4`}>
-                                    <button className={`${GlobalStyle.buttonPrimary} mx-auto`}>
-                                        Proceed
-                                    </button>
+                                <button
+                      className={`${GlobalStyle.buttonPrimary} mx-auto`}
+                      onClick={""}
+                    >
+                      Proceed
+                    </button>
                                 </td>
                             </tr>
                         ))}
                         {paginatedData.length === 0 && (
                             <tr>
-                                <td colSpan="7" className="text-center py-4">
+                                <td colSpan="6" className="text-center py-4">
                                     No results found
                                 </td>
                             </tr>
@@ -211,16 +250,52 @@ export default function DirectLODSendingIncident() {
                     </tbody>
                 </table>
             </div>
+            </div>
+
+            {/* Navigation Buttons */}
+      {filteredData.length > rowsPerPage && (
+        <div className={GlobalStyle.navButtonContainer}>
+          <button
+            className={GlobalStyle.navButton}
+            onClick={handlePrevPage}
+            disabled={currentPage === 0}
+          >
+            <FaArrowLeft />
+          </button>
+          <span>
+            Page {currentPage + 1} of {pages}
+          </span>
+          <button
+            className={GlobalStyle.navButton}
+            onClick={handleNextPage}
+            disabled={currentPage === pages - 1}
+          >
+            <FaArrowRight />
+          </button>
+        </div>
+      )}
 
 
-                <div className="flex items-center p-4">
-                    <Link
-                        className={`${GlobalStyle.buttonPrimary} ml-4`}
-                        to="/lod/ftllod/ftllod/downloadcreateftllod"
-                    >
-                        Create
-                    </Link>
-                </div>
+<div className="flex justify-end items-center w-full mt-6">
+        {/* Select All Data Checkbox */}
+        <label className="flex items-center gap-2">
+        <input
+  type="checkbox"
+  className="rounded-lg"
+  checked={selectAllData || filteredData.every((row) => selectedRows.includes(row.id))} // Reflect selection state
+  onChange={handleSelectAllDataChange}
+/>
+
+          Select All Data
+        </label>
+
+        <Link
+          className={`${GlobalStyle.buttonPrimary} ml-4`}
+          to="/lod/ftllod/ftllod/downloadcreateftllod"
+        >
+          Create
+        </Link>
+      </div>
             </div>
         
     );
