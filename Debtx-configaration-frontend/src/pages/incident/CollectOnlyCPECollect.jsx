@@ -100,7 +100,7 @@ export default function DirectLODSendingIncident() {
     return (
         <div className={`p-4 ${GlobalStyle.fontPoppins}`}>
             <div className="flex justify-between items-center w-full">
-                <h1 className={`${GlobalStyle.headingLarge} m-0`}>Direct LOD sending Incidents</h1>
+                <h1 className={`${GlobalStyle.headingLarge} m-0`}>Incidents ready for distribute to Collect only CPE</h1>
                 <Link
                     className={`${GlobalStyle.buttonPrimary}`}
                     to="/lod/ftllod/ftllod/downloadcreateftllod"
