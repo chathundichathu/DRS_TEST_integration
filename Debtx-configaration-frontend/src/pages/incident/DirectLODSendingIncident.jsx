@@ -3,6 +3,7 @@ import DatePicker from "react-datepicker";
 import { FaArrowLeft, FaArrowRight, FaSearch } from "react-icons/fa";
 import { useNavigate, Link } from "react-router-dom";
 import GlobalStyle from "../../assets/prototype/GlobalStyle.jsx";
+import Direct_LOD from "../../assets/images/Direct_LOD.png";
 
 export default function DirectLODSendingIncident() {
     const navigate = useNavigate();
@@ -190,6 +191,17 @@ export default function DirectLODSendingIncident() {
                                         {row.id}
                                     </a>
                                 </td>
+                                <td className={GlobalStyle.tableData}>
+                    <div
+                      className="flex justify-center items-center h-full"
+                      title={row.status}
+                      aria-label={row.status}
+                    >
+                      {row.status === "Direct LOD" && (
+                        <img src={Direct_LOD} alt="Direct LOD" className="w-5 h-5" />
+                      )}
+                    </div>
+                  </td>
                                 <td className={GlobalStyle.tableData}>{row.status}</td>
                                 <td className={GlobalStyle.tableData}>{row.account_no}</td>
                                 <td className={GlobalStyle.tableData}>{row.amount}</td>
