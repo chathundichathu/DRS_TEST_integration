@@ -458,7 +458,7 @@ export default function DRCcaseList() {
   return (
     <div className={`p-4 ${GlobalStyle.fontPoppins}`}>
       <div className="flex justify-between items-center w-full">
-        <h1 className={`${GlobalStyle.headingLarge} m-0`}>Incidents Open for Distribution</h1>
+        <h1 className={`${GlobalStyle.headingLarge} m-0`}>Pending Reject Incident </h1>
         <Link
           className={`${GlobalStyle.buttonPrimary}`}
           to="/lod/ftllod/ftllod/downloadcreateftllod"
