@@ -85,7 +85,7 @@ export default function RejectIncident() {
   const [selectAllData, setSelectAllData] = useState(false);
   const [selectedRows, setSelectedRows] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(0);
 
   // validation for date
   const handleFromDateChange = (date) => {
@@ -136,11 +136,11 @@ export default function RejectIncident() {
   const endIndex = startIndex + rowsPerPage;
   const paginatedData = filteredSearchData.slice(startIndex, endIndex);
 
-  const handleRowCheckboxChange = (caseId) => {
-    if (selectedRows.includes(caseId)) {
-      setSelectedRows(selectedRows.filter((id) => id !== caseId));
+  const handleRowCheckboxChange = (id) => {
+    if (selectedRows.includes(id)) {
+      setSelectedRows(selectedRows.filter((id) => id !== id));
     } else {
-      setSelectedRows([...selectedRows, caseId]);
+      setSelectedRows([...selectedRows, id]);
     }
   };
 
@@ -148,11 +148,11 @@ export default function RejectIncident() {
     if (selectAllData) {
       setSelectedRows([]);
     } else {
-      setSelectedRows(data.map((row) => row.id));
+      setSelectedRows(filteredData.map((row) => row.id));
     }
     setSelectAllData(!selectAllData);
   };
-
+  
   return (
     <div className={GlobalStyle.fontPoppins}>
       <div className="flex justify-between items-center w-full">
@@ -173,9 +173,9 @@ export default function RejectIncident() {
         <div className="flex items-center gap-2">
           <h1 className="mr-2">Source:</h1>
           <select className={GlobalStyle.selectBox}>
-            <option value="option1">Option 1</option>
-            <option value="option2">Option 2</option>
-            <option value="option3">Option 3</option>
+            <option value="option1">Select</option>
+            <option value="option2">Option 1</option>
+            <option value="option3">Option 2</option>
           </select>
         </div>
 
