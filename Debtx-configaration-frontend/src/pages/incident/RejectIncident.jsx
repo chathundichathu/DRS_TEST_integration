@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import GlobalStyle from "../../assets/prototype/GlobalStyle.jsx"; // Import GlobalStyle
+import Reject_Pending from "../../assets/images/Reject_Pending.png"
 
 
 export default function RejectIncident() {
@@ -276,6 +277,16 @@ export default function RejectIncident() {
                                             {row.id}
                                         </a>
                                     </td>
+                                    
+                                    <td className={`${GlobalStyle.tableData} flex items-center justify-center`}>
+  {row.status === "Reject Pending4" && (
+    <img
+      src={Reject_Pending}
+      alt="Reject Pending"
+      className="w-5 h-5"
+    />
+  )}
+</td>
                                     <td className={GlobalStyle.tableData}>{row.status}</td>
                                     <td className={GlobalStyle.tableData}>{row.account_no}</td>
                                     <td className={GlobalStyle.tableData}>{row.filtered_reason}</td>

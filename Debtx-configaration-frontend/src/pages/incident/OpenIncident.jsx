@@ -2,6 +2,8 @@ import { useState } from "react";
 import GlobalStyle from "../../assets/prototype/GlobalStyle";
 import { Link, useNavigate } from "react-router-dom";
 import { FaSearch, FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import Open_No_Agent from "../../assets/images/Open_No_Agent.png"
+
 
 export default function OpenIncident() {
   const [searchQuery, setSearchQuery] = useState(""); // for searching
@@ -11,9 +13,6 @@ export default function OpenIncident() {
   const navigate = useNavigate();
   const rowsPerPage = 7;
 
-  const handleTabClick = (tab) => {
-    setActiveTab(tab);
-  };
 
   const data = [
     {
@@ -119,11 +118,11 @@ export default function OpenIncident() {
   const endIndex = startIndex + rowsPerPage;
   const paginatedData = filteredData.slice(startIndex, endIndex);
 
-  const handleRowCheckboxChange = (caseId) => {
-    if (selectedRows.includes(caseId)) {
-      setSelectedRows(selectedRows.filter((id) => id !== caseId));
+  const handleRowCheckboxChange = (id) => {
+    if (selectedRows.includes(id)) {
+      setSelectedRows(selectedRows.filter((id) => id !== id));
     } else {
-      setSelectedRows([...selectedRows, caseId]);
+      setSelectedRows([...selectedRows, id]);
     }
   };
 
@@ -131,7 +130,7 @@ export default function OpenIncident() {
     if (selectAllData) {
       setSelectedRows([]);
     } else {
-      setSelectedRows(data.map((row) => row.caseId));
+      setSelectedRows(data.map((row) => row.id));
     }
     setSelectAllData(!selectAllData);
   };
@@ -250,8 +249,8 @@ export default function OpenIncident() {
                     <input
                       type="checkbox"
                       className={"rounded-lg"}
-                      checked={selectedRows.includes(row.caseId)}
-                      onChange={() => handleRowCheckboxChange(row.caseId)}
+                      checked={selectedRows.includes(row.id)}
+                      onChange={() => handleRowCheckboxChange(row.id)}
                     />
                   </td>
                   <td className={GlobalStyle.tableData}>
