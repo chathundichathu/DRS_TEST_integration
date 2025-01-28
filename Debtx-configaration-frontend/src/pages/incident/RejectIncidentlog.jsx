@@ -13,7 +13,7 @@ export default function RejectIncidentlog() {
   const tableData = [
     {
       id: "RC001",
-      status: "Direct LOD",
+      status: "Incident Reject",
       account_no: "0115678",
       filtered_reason: "credit class",
       reject_owned: "9/10/2024",
@@ -21,7 +21,7 @@ export default function RejectIncidentlog() {
     },
     {
       id: "RC002",
-      status: "Direct LOD",
+      status: "Incident Reject",
       account_no: "0115678",
       filtered_reason: "customer type",
       reject_owned: "9/10/2024",
@@ -29,7 +29,7 @@ export default function RejectIncidentlog() {
     },
     {
       id: "RC003",
-      status: "Direct LOD",
+      status: "Incident Reject",
       account_no: "0115678",
       filtered_reason: "credit class",
       reject_owned: "9/10/2024",
@@ -229,7 +229,20 @@ export default function RejectIncidentlog() {
                       {row.id}
                     </a>
                   </td>
-                  <td className={GlobalStyle.tableData}>{row.status}</td>
+                  <td className={GlobalStyle.tableData}>
+  <div className="flex justify-center items-center h-full">
+    {row.status.toLowerCase() === "incident reject" && (
+      <div title="Incident Reject" aria-label="Incident Reject">
+        <img
+          src={Incident_Reject}
+          alt="Incident Reject"
+          className="w-5 h-5"
+        />
+      </div>
+    )}
+  </div>
+</td>
+
                   <td className={GlobalStyle.tableData}>{row.account_no}</td>
                   <td className={GlobalStyle.tableData}>
                     {row.filtered_reason}
