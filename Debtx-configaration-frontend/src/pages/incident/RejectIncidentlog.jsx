@@ -131,9 +131,9 @@ export default function RejectIncidentlog() {
             onChange={(e) => setSelectedSource(e.target.value)}
           >
             <option value="">Action Type</option>
-            <option value="Pilot - Suspended">Pilot - Suspended</option>
-            <option value="Special">Special</option>
-            <option value="Product Terminate">Product Terminate</option>
+            <option value="Select 1">Select 1</option>
+            <option value="Select 2">Select 2</option>
+            <option value="Select 3">Select 3</option>
           </select>
         </div>
 
