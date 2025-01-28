@@ -3,8 +3,8 @@ import DatePicker from "react-datepicker";
 import { FaArrowLeft, FaArrowRight, FaSearch } from "react-icons/fa";
 import { useNavigate, Link } from "react-router-dom";
 import GlobalStyle from "../../assets/prototype/GlobalStyle.jsx";
-import 'react-datepicker/dist/react-datepicker.css';
-import Incident_Reject from "../../assets/images/Incident_Reject.png"
+import "react-datepicker/dist/react-datepicker.css";
+import Incident_Reject from "../../assets/images/Incident_Reject.png";
 
 export default function RejectIncidentlog() {
   const navigate = useNavigate();
@@ -165,7 +165,7 @@ export default function RejectIncidentlog() {
           Filter
         </button>
       </div>
-      
+
       {/* Table Section */}
       <div className="flex flex-col">
         {/* Search Bar Section */}
@@ -230,18 +230,21 @@ export default function RejectIncidentlog() {
                     </a>
                   </td>
                   <td className={GlobalStyle.tableData}>
-  <div className="flex justify-center items-center h-full">
-    {row.status.toLowerCase() === "incident reject" && (
-      <div title="Incident Reject" aria-label="Incident Reject">
-        <img
-          src={Incident_Reject}
-          alt="Incident Reject"
-          className="w-5 h-5"
-        />
-      </div>
-    )}
-  </div>
-</td>
+                    <div className="flex justify-center items-center h-full">
+                      {row.status.toLowerCase() === "incident reject" && (
+                        <div
+                          title="Incident Reject"
+                          aria-label="Incident Reject"
+                        >
+                          <img
+                            src={Incident_Reject}
+                            alt="Incident Reject"
+                            className="w-5 h-5"
+                          />
+                        </div>
+                      )}
+                    </div>
+                  </td>
 
                   <td className={GlobalStyle.tableData}>{row.account_no}</td>
                   <td className={GlobalStyle.tableData}>

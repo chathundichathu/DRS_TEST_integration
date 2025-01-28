@@ -152,7 +152,7 @@ export default function RejectIncident() {
     }
     setSelectAllData(!selectAllData);
   };
-  
+
   return (
     <div className={GlobalStyle.fontPoppins}>
       <div className="flex justify-between items-center w-full">
@@ -287,7 +287,7 @@ export default function RejectIncident() {
                       />
                     )}
                   </td>
-                  
+
                   <td className={GlobalStyle.tableData}>{row.account_no}</td>
                   <td className={GlobalStyle.tableData}>
                     {row.filtered_reason}

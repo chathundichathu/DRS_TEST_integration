@@ -3,6 +3,7 @@ import DatePicker from "react-datepicker";
 import { FaArrowLeft, FaArrowRight, FaSearch } from "react-icons/fa";
 import { useNavigate, Link } from "react-router-dom";
 import GlobalStyle from "../../assets/prototype/GlobalStyle.jsx";
+import Open_CPE_Collect from "../../assets/images/Open_CPE_Collect.png";
 
 export default function CollectOnlyCPECollect() {
   const navigate = useNavigate();
@@ -11,21 +12,21 @@ export default function CollectOnlyCPECollect() {
   const tableData = [
     {
       id: "C001",
-      status: "Direct LOD",
+      status: "Open CPE Collect",
       account_no: "0115678",
       amount: "500",
       source_type: "Pilot - Suspended",
     },
     {
       id: "C002",
-      status: "Direct LOD",
+      status: "Open CPE Collect",
       account_no: "8765946",
       amount: "590",
       source_type: "Special",
     },
     {
       id: "C003",
-      status: "Direct LOD",
+      status: "Open CPE Collect",
       account_no: "3754918",
       amount: "900",
       source_type: "Product Terminate",
@@ -226,7 +227,23 @@ export default function CollectOnlyCPECollect() {
                       {row.id}
                     </a>
                   </td>
-                  <td className={GlobalStyle.tableData}>{row.status}</td>
+                  <td className={GlobalStyle.tableData}>
+                    <div className="flex justify-center items-center h-full">
+                      {row.status.toLowerCase() === "open cpe collect" && (
+                        <div
+                          title="Open CPE Collect"
+                          aria-label="Open CPE Collect"
+                        >
+                          <img
+                            src={Open_CPE_Collect}
+                            alt="Open CPE Collect"
+                            className="w-5 h-5"
+                          />
+                        </div>
+                      )}
+                    </div>
+                  </td>
+
                   <td className={GlobalStyle.tableData}>{row.account_no}</td>
                   <td className={GlobalStyle.tableData}>
                     {new Intl.NumberFormat("en-US").format(row.action)}
