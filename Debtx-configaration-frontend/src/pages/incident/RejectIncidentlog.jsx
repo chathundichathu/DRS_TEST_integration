@@ -122,11 +122,11 @@ export default function RejectIncidentlog() {
       </div>
 
       {/* Filter Section */}
-      <div className="flex flex-wrap gap-4 my-5 items-center justify-end">
-        {/* Row 1: Source Dropdowns */}
-        <div className="flex items-center gap-4 w-full justify-end">
+      <div className="flex justify-end gap-10 my-12 items-center">
+        {/* Source Dropdown */}
+        <div className="flex items-center gap-4">
           <select
-            className={`${GlobalStyle.inputText} dropdownSmall`}
+            className={GlobalStyle.inputText}
             value={selectedSource}
             onChange={(e) => setSelectedSource(e.target.value)}
           >
@@ -135,49 +135,37 @@ export default function RejectIncidentlog() {
             <option value="Special">Special</option>
             <option value="Product Terminate">Product Terminate</option>
           </select>
-
-          <select
-            className={`${GlobalStyle.inputText} dropdownSmall`}
-            value={selectedSource}
-            onChange={(e) => setSelectedSource(e.target.value)}
-          >
-            <option value="">Status</option>
-            <option value="Pilot - Suspended">Pilot - Suspended</option>
-            <option value="Special">Special</option>
-            <option value="Product Terminate">Product Terminate</option>
-          </select>
         </div>
 
-        {/* Row 2: Date Picker and Filter Button */}
-        <div className="flex items-center gap-4 w-full justify-end">
-          <div className="flex items-center gap-1">
-            <label className="whitespace-nowrap">Date:</label>
-            <DatePicker
-              selected={fromDate}
-              onChange={handleFromDateChange}
-              dateFormat="dd/MM/yyyy"
-              placeholderText="dd/MM/yyyy"
-              className={GlobalStyle.inputText}
-            />
-            <DatePicker
-              selected={toDate}
-              onChange={handleToDateChange}
-              dateFormat="dd/MM/yyyy"
-              placeholderText="dd/MM/yyyy"
-              className={GlobalStyle.inputText}
-            />
-            {error && <span className={GlobalStyle.errorText}>{error}</span>}
-          </div>
-
-          <button
-            className={`${GlobalStyle.buttonPrimary} h-[35px]`}
-            onClick={() => {}}
-          >
-            Filter
-          </button>
+        {/* Date Picker Section */}
+        <div className="flex items-center gap-4">
+          <label>Date:</label>
+          <DatePicker
+            selected={fromDate}
+            onChange={handleFromDateChange}
+            dateFormat="dd/MM/yyyy"
+            placeholderText="dd/MM/yyyy"
+            className={GlobalStyle.inputText}
+          />
+          <DatePicker
+            selected={toDate}
+            onChange={handleToDateChange}
+            dateFormat="dd/MM/yyyy"
+            placeholderText="dd/MM/yyyy"
+            className={GlobalStyle.inputText}
+          />
+          {error && <span className={GlobalStyle.errorText}>{error}</span>}
         </div>
+
+        {/* Filter Button */}
+        <button
+          className={`${GlobalStyle.buttonPrimary} h-[35px]`}
+          onClick={() => {}}
+        >
+          Filter
+        </button>
       </div>
-
+      
       {/* Table Section */}
       <div className="flex flex-col">
         {/* Search Bar Section */}
